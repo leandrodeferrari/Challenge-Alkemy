@@ -26,7 +26,7 @@ public class Personaje implements Serializable {
     private byte[] imagen;
     private String nombre;
     private String historia;
-    @ManyToMany //(mappedBy = "personajes")
+    @ManyToMany
     @JoinTable(name = "personajes_peliculas_series",
             joinColumns = {
                 @JoinColumn(name = "id_personaje", referencedColumnName = "id")},

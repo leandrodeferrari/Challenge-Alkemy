@@ -29,7 +29,7 @@ public class PeliculaSerie implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_genero")
     private Genero genero;
-    @ManyToMany //(mappedBy = "peliculasSeries")
+    @ManyToMany
     @JoinTable(name = "personajes_peliculas_series",
             joinColumns = {
                 @JoinColumn(name = "id_pelicula_serie", referencedColumnName = "id")},
