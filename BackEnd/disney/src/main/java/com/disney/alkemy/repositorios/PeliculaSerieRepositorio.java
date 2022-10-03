@@ -18,12 +18,16 @@ public interface PeliculaSerieRepositorio extends JpaRepository<PeliculaSerie, I
 
     public Optional<PeliculaSerie> findByTitulo(String titulo);
 
+    // Hay que ver si funciona
     public Optional<PeliculaSerie> findByGenero(Integer idGenero);
-    
+
     @Query(value = "SELECT * FROM peliculas_series ORDER BY fecha_de_creacion ASC", nativeQuery = true)
     public List<PeliculaSerie> ordenarPeliculasSeriesPorFechaDeCreacionAsc();
 
     @Query(value = "SELECT * FROM peliculas_series ORDER BY fecha_de_creacion DESC", nativeQuery = true)
     public List<PeliculaSerie> ordenarPeliculasSeriesPorFechaDeCreacionDesc();
 
+//    @Query(value = "SELECT ps FROM PeliculaSerie ps JOIN ps.personajes p WHERE p.id = :idPeliculaSerie")
+//    public List<Personaje> consultarPersonajeConSusPeliculasSeries(Integer idPeliculaSerie);
+    
 }
