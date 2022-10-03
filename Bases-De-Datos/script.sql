@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS personajes(
     peso FLOAT UNSIGNED NOT NULL,
     nombre VARCHAR(30) NOT NULL,
     imagen BLOB,
-    historia VARCHAR(256),
+    historia VARCHAR(255),
 	CONSTRAINT PK_personajes_id PRIMARY KEY(id)
 );
 
@@ -56,3 +56,4 @@ CREATE TABLE IF NOT EXISTS personajes_peliculas_series(
 
 ALTER TABLE personajes_peliculas_series
 ADD CONSTRAINT UQ_personajes_peliculas_series_id_personaje_id_pelicula_serie UNIQUE (id_personaje, id_pelicula_serie);
+
