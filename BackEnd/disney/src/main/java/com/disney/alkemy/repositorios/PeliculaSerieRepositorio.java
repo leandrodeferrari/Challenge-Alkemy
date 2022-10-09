@@ -1,8 +1,10 @@
 package com.disney.alkemy.repositorios;
 
 import com.disney.alkemy.entidades.PeliculaSerie;
-import java.util.*;
-import org.springframework.data.jpa.repository.*;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,7 +20,6 @@ public interface PeliculaSerieRepositorio extends JpaRepository<PeliculaSerie, I
 
     public Optional<PeliculaSerie> findByTitulo(String titulo);
 
-    // Hay que ver si funciona
     public Optional<PeliculaSerie> findByGenero(Integer idGenero);
 
     @Query(value = "SELECT * FROM peliculas_series ORDER BY fecha_de_creacion ASC", nativeQuery = true)

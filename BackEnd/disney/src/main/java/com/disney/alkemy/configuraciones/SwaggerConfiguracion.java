@@ -1,8 +1,10 @@
 package com.disney.alkemy.configuraciones;
 
 import java.util.Collections;
-import org.springframework.context.annotation.*;
-import springfox.documentation.builders.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -36,12 +38,12 @@ public class SwaggerConfiguracion {
                 "Challenge Alkemy",
                 "Api Rest de Disney",
                 "0.0.1",
-                "Terminos de servicio",
+                "Terminos del servicio",
                 new Contact("Leandro Deferrari",
-                        "https://www.linkedin.com/in/javadeveloper-leandrodeferrariarevalo/",
-                        "leandro_deferrari@hotmail.com"),
-                "Lincencia de API",
-                "Licencia de API URL",
+                            "https://www.linkedin.com/in/javadeveloper-leandrodeferrariarevalo/",
+                            "leandro_deferrari@hotmail.com"),
+                "Lincencia de la API",
+                "Licencia de la API URL",
                 Collections.emptyList());
 
     }

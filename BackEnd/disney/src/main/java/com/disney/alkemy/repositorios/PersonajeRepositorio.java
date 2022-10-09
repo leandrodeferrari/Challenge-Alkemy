@@ -1,8 +1,10 @@
 package com.disney.alkemy.repositorios;
 
 import com.disney.alkemy.entidades.Personaje;
-import java.util.*;
-import org.springframework.data.jpa.repository.*;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -21,7 +23,6 @@ public interface PersonajeRepositorio extends JpaRepository<Personaje, Integer> 
 
     public Optional<Personaje> findByPeso(float peso);
 
-    // Hay que ver si funciona
     public Optional<Personaje> findByPeliculasSeries(Integer idPeliculaSerie);
     
 //    @Query(value = "SELECT p FROM Personaje p JOIN p.peliculasSeries ps WHERE ps.id = :idPersonaje")
