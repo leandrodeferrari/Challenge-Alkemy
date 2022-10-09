@@ -1,5 +1,6 @@
 package com.disney.alkemy.repositorios;
 
+import com.disney.alkemy.dto.PersonajeDTO;
 import com.disney.alkemy.entidades.Personaje;
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Repository;
  *
  * @author Leandro Deferrari
  */
+
 @Repository
 public interface PersonajeRepositorio extends JpaRepository<Personaje, Integer> {
 
     @Query(value = "SELECT nombre, imagen FROM personajes", nativeQuery = true)
-    public List<Personaje> consultarNombresImagenesDePersonajes();
+    public List<PersonajeDTO> consultarNombresImagenesDePersonajes();
 
     public Optional<Personaje> findByNombre(String nombre);
 

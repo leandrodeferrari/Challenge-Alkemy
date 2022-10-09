@@ -1,5 +1,6 @@
 package com.disney.alkemy.repositorios;
 
+import com.disney.alkemy.dto.PeliculaSerieDTO;
 import com.disney.alkemy.entidades.PeliculaSerie;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface PeliculaSerieRepositorio extends JpaRepository<PeliculaSerie, Integer> {
 
     @Query(value = "SELECT titulo, imagen, fecha_de_creacion FROM peliculas_series", nativeQuery = true)
-    public List<PeliculaSerie> consultarTitulosImagenesFechasDeCreacionDePeliculasSeries();
+    public List<PeliculaSerieDTO> consultarTitulosImagenesFechasDeCreacionDePeliculasSeries();
 
     public Optional<PeliculaSerie> findByTitulo(String titulo);
 
