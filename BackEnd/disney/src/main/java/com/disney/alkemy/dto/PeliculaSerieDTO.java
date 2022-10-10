@@ -1,27 +1,21 @@
 package com.disney.alkemy.dto;
 
-import java.time.LocalDateTime;
-import javax.persistence.Basic;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  *
  * @author Leandro Deferrari
  */
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class PeliculaSerieDTO {
 
+    @ApiModelProperty(position = 0)
+    private String imagen;
+    @ApiModelProperty(position = 1)
     private String titulo;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] imagen;
-    private LocalDateTime fechaDeCreacion;
+    @ApiModelProperty(position = 2)
+    private String fechaDeCreacion;
 
 }

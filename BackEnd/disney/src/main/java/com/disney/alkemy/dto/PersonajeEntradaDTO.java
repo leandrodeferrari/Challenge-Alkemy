@@ -1,6 +1,5 @@
 package com.disney.alkemy.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -9,11 +8,12 @@ import lombok.Data;
  */
 
 @Data
-public class PersonajeDTO {
-
-    @ApiModelProperty(position = 0)
+public class PersonajeEntradaDTO {
+    
+    private byte edad;
+    private float peso;
     private String imagen;
-    @ApiModelProperty(position = 1)
     private String nombre;
-
+    private String historia;
+    
 }
