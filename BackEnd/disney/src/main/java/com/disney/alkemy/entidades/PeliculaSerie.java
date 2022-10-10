@@ -3,16 +3,13 @@ package com.disney.alkemy.entidades;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -32,9 +29,7 @@ public class PeliculaSerie implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String titulo;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] imagen;
+    private String imagen;
     @Column(name = "fecha_de_creacion")
     private LocalDateTime fechaDeCreacion;
     private byte calificacion;
