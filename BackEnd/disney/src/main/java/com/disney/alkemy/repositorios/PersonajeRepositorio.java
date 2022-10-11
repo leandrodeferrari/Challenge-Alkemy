@@ -1,9 +1,8 @@
 package com.disney.alkemy.repositorios;
 
-import com.disney.alkemy.dto.PersonajeDTO;
+import com.disney.alkemy.entidades.PeliculaSerie;
 import com.disney.alkemy.entidades.Personaje;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,18 +15,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PersonajeRepositorio extends JpaRepository<Personaje, Integer> {
 
-    @Query(value = "SELECT nombre, imagen FROM personajes", nativeQuery = true)
-    public List<PersonajeDTO> consultarNombresImagenesDePersonajes();
+    @Query(value = "SELECT * FROM personajes", nativeQuery = true)
+    public List<Personaje> consultarPersonajes();
 
-    public Optional<Personaje> findByNombre(String nombre);
+    public List<Personaje> findByNombre(String nombre);
 
-    public Optional<Personaje> findByEdad(byte edad);
+    public List<Personaje> findByEdad(byte edad);
 
-    public Optional<Personaje> findByPeso(float peso);
+    public List<Personaje> findByPeso(float peso);
 
-    public Optional<Personaje> findByPeliculasSeries(Integer idPeliculaSerie);
-    
-//    @Query(value = "SELECT p FROM Personaje p JOIN p.peliculasSeries ps WHERE ps.id = :idPersonaje")
-//    public List<Personaje> consultarPersonajeConSusPeliculasSeries(Integer idPersonaje);
+    public List<Personaje> findByPeliculasSeries(PeliculaSerie peliculaSerie);
 
 }
