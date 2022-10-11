@@ -1,6 +1,7 @@
 package com.disney.alkemy.controladores;
 
 import com.disney.alkemy.dto.PersonajeDTO;
+import com.disney.alkemy.dto.PersonajeDetalleDTO;
 import com.disney.alkemy.dto.PersonajeEntradaDTO;
 import com.disney.alkemy.dto.PersonajeSalidaDTO;
 import com.disney.alkemy.servicios.PersonajeServicioImpl;
@@ -57,7 +58,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Listado de personajes, filtrados por nombre")
+    @ApiOperation(value = "Listado de personajes, filtrados por nombre", notes = "Recibe, como parámetro, un nombre (String, longitud máx: 30)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -80,7 +81,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Listado de personajes, filtrados por edad")
+    @ApiOperation(value = "Listado de personajes, filtrados por edad", notes = "Recibe, como parámetro, una edad (byte)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -103,7 +104,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Listado de personajes filtrados por Pelicula/Serie")
+    @ApiOperation(value = "Listado de personajes, filtrados por Pelicula/Serie", notes = "Recibe, como parámetro, un ID de Pelicula/Serie (Integer)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -126,17 +127,22 @@ public class PersonajeControlador {
 
     }
 
-//    @ApiOperation(value = "Detalle del personaje", notes = "Atributos de los personajes: Nombre e Imagen")
-//    @GetMapping("/detail/{id}")
-//    public ResponseEntity<Personaje> detallarPersonaje(@PathVariable("id") Integer id) {
-//
-//        Personaje personaje = personajeServicio.detallarPersonajeConSusPeliculasSeries(id);
-//
-//        return new ResponseEntity<>(personaje, HttpStatus.OK);
-//
-//    }
+    @ApiOperation(value = "Detalle del personaje, con sus Peliculas/Series", notes = "Recibe por path, el ID del personaje")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeDetalleDTO.class),
+        @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
+        @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
+    })
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<PersonajeDetalleDTO> detallarPersonaje(@PathVariable("id") Integer id) {
+
+        PersonajeDetalleDTO personaje = personajeServicio.detallarPersonajeConSusPeliculasSeries(id);
+
+        return new ResponseEntity<>(personaje, HttpStatus.OK);
+
+    }
     
-    @ApiOperation(value = "Creación de personajes", notes = "Atributos que se necesita para la creación: Edad, Peso, Imagen, Nombre e Historia")
+    @ApiOperation(value = "Creación de personaje", notes = "Atributos que se necesita para la creación: Edad, Peso, Imagen, Nombre e Historia")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se creó correctamente", response = PersonajeEntradaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo crear el recurso, debido a una falla en el cliente", response = String.class),
