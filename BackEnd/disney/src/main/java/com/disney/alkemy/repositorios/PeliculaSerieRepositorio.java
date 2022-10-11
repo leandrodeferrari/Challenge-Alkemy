@@ -2,6 +2,7 @@ package com.disney.alkemy.repositorios;
 
 import com.disney.alkemy.entidades.Genero;
 import com.disney.alkemy.entidades.PeliculaSerie;
+import com.disney.alkemy.entidades.Personaje;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,5 +28,7 @@ public interface PeliculaSerieRepositorio extends JpaRepository<PeliculaSerie, I
 
     @Query(value = "SELECT * FROM peliculas_series ORDER BY fecha_de_creacion DESC", nativeQuery = true)
     public List<PeliculaSerie> ordenarPeliculasSeriesPorFechaDeCreacionDesc();
+    
+    public List<PeliculaSerie> findByPersonajes(Personaje personaje);
     
 }
