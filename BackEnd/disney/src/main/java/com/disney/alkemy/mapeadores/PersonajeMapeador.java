@@ -2,6 +2,7 @@ package com.disney.alkemy.mapeadores;
 
 import com.disney.alkemy.entidades.Personaje;
 import com.disney.alkemy.dto.PersonajeDTO;
+import com.disney.alkemy.dto.PersonajeDetalleDTO;
 import org.mapstruct.Mapper;
 import com.disney.alkemy.dto.PersonajeEntradaDTO;
 import com.disney.alkemy.dto.PersonajeSalidaDTO;
@@ -32,5 +33,15 @@ public interface PersonajeMapeador {
     public Personaje personajeSalidaDTOToPersonaje(PersonajeSalidaDTO personajeSalidaDto);
     
     public PersonajeSalidaDTO personajeToPersonajeSalidaDTO(Personaje personaje);
+    
+    @Mappings({
+        @Mapping(target = "peliculasSeries", ignore = true)
+    })
+    public Personaje personajeDetalleDTOToPersonaje(PersonajeDetalleDTO personajeDetalleDto);
+    
+    @Mappings({
+        @Mapping(target = "peliculasSeries", ignore = true)
+    })
+    public PersonajeDetalleDTO personajeToPersonajeDetalleDTO(Personaje personaje);
     
 }
