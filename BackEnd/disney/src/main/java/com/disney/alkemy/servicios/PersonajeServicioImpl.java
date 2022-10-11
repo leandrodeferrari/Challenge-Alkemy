@@ -1,8 +1,20 @@
 package com.disney.alkemy.servicios;
 
+import com.disney.alkemy.dto.PersonajeDTO;
 import com.disney.alkemy.entidades.Personaje;
+import com.disney.alkemy.mapeadores.PersonajeMapeador;
+import com.disney.alkemy.repositorios.PersonajeRepositorio;
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.disney.alkemy.dto.PersonajeEntradaDTO;
+import com.disney.alkemy.dto.PersonajeSalidaDTO;
+import com.disney.alkemy.entidades.PeliculaSerie;
+import com.disney.alkemy.excepciones.PersonajeExcepcion;
+import com.disney.alkemy.repositorios.PeliculaSerieRepositorio;
+import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -12,49 +24,225 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonajeServicioImpl implements IPersonajeServicio {
 
-    @Override
-    public List<Personaje> listarPersonajesPorNombreImagen() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    @Autowired
+    private PersonajeRepositorio personajeRepositorio;
+    
+    @Autowired
+    private PeliculaSerieRepositorio peliculaSerieRepositorio;
+
+    @Autowired
+    private PersonajeMapeador personajeMapeador;
 
     @Override
-    public boolean crearPersonaje(Personaje personaje) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<PersonajeDTO> listarPersonajesPorNombreImagen() {
+
+        List<PersonajeDTO> personajesDto = new ArrayList<>();
+
+        List<Personaje> personajes = personajeRepositorio.consultarPersonajes();
+
+        if (!personajes.isEmpty()) {
+
+            for (Personaje personaje : personajes) {
+
+                PersonajeDTO personajeDto = personajeMapeador.personaToPersonajeDTO(personaje);
+
+                personajesDto.add(personajeDto);
+
+            }
+
+        }
+
+        return personajesDto;
+
     }
 
+    @Transactional
     @Override
-    public boolean modificarPersonaje(Personaje personaje) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean crearPersonaje(PersonajeEntradaDTO personajeEntradaDto) {
+
+        Personaje personaje = personajeMapeador.personajeEntradaDTOToPersonaje(personajeEntradaDto);
+
+        try {
+
+            personajeRepositorio.save(personaje);
+
+        } catch (PersonajeExcepcion ex) {
+
+            ex.getMessage();
+            return false;
+
+        }
+
+        return true;
+
     }
 
+    @Transactional
+    @Override
+    public boolean modificarPersonaje(PersonajeEntradaDTO personajeEntradaDto, Integer id) {
+
+        Optional<Personaje> respuesta = personajeRepositorio.findById(id);
+
+        if (respuesta.isPresent()) {
+
+            Personaje personaje = respuesta.get();
+
+            Personaje personajeAuxiliar = personajeMapeador.personajeEntradaDTOToPersonaje(personajeEntradaDto);
+
+            personajeAuxiliar.setId(personaje.getId());
+            personajeAuxiliar.setPeliculasSeries(personaje.getPeliculasSeries());
+
+            personajeRepositorio.save(personajeAuxiliar);
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+    @Transactional
     @Override
     public boolean eliminarPersonaje(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        Optional<Personaje> respuesta = personajeRepositorio.findById(id);
+
+        if (respuesta.isPresent()) {
+
+            personajeRepositorio.deleteById(id);
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+//    @Override
+//    public Personaje detallarPersonajeConSusPeliculasSeries(Integer id) {
+//        
+//        Optional<Personaje> respuesta = personajeRepositorio.findById(id);
+//        
+//        if(respuesta.isPresent()){
+//            
+//           Personaje personaje = respuesta.get();
+//           
+//            System.out.println("detalle pe: " + personaje.getPeliculasSeries());
+//           
+//            return personaje;
+//            
+//        }
+//        
+//        return new Personaje();
+//        
+//    }
+
+    @Override
+    public List<PersonajeSalidaDTO> buscarPersonajesPorNombre(String nombre) {
+
+        List<PersonajeSalidaDTO> personajesSalida = new ArrayList<>();
+
+        List<Personaje> personajes = personajeRepositorio.findByNombre(nombre);
+
+        if (personajes != null) {
+
+            for (Personaje personaje : personajes) {
+
+                PersonajeSalidaDTO personajeSalida = personajeMapeador.
+                        personajeToPersonajeSalidaDTO(personaje);
+
+                personajesSalida.add(personajeSalida);
+
+            }
+
+        }
+
+        return personajesSalida;
+
     }
 
     @Override
-    public List<Personaje> detallarPersonajeConSusPeliculasSeries(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<PersonajeSalidaDTO> buscarPersonajesPorEdad(byte edad) {
+
+        List<PersonajeSalidaDTO> personajesSalida = new ArrayList<>();
+
+        List<Personaje> personajes = personajeRepositorio.findByEdad(edad);
+
+        if(!personajes.isEmpty()){
+            
+            for (Personaje personaje : personajes) {
+                
+                PersonajeSalidaDTO personajeSalida = personajeMapeador.
+                        personajeToPersonajeSalidaDTO(personaje);
+
+                personajesSalida.add(personajeSalida);
+                
+            }
+            
+        }
+
+        return personajesSalida;
+
     }
 
     @Override
-    public List<Personaje> buscarPersonajesPorNombre(String nombre) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<PersonajeSalidaDTO> buscarPersonajesPorPeso(float peso) {
+        
+        List<PersonajeSalidaDTO> personajesSalida = new ArrayList<>();
+
+        List<Personaje> personajes = personajeRepositorio.findByPeso(peso);
+
+        if(!personajes.isEmpty()){
+            
+            for (Personaje personaje : personajes) {
+                
+                PersonajeSalidaDTO personajeSalida = personajeMapeador.
+                        personajeToPersonajeSalidaDTO(personaje);
+
+                personajesSalida.add(personajeSalida);
+                
+            }
+            
+        }
+
+        return personajesSalida;
+        
     }
 
     @Override
-    public List<Personaje> buscarPersonajesPorEdad(byte edad) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<PersonajeSalidaDTO> buscarPersonajesPorPeliculaSerie(Integer idPeliculaSerie) {
+        
+        Optional<PeliculaSerie> respuestaPeliculaSerie = peliculaSerieRepositorio.findById(idPeliculaSerie);
+        
+        if(respuestaPeliculaSerie.isPresent()){
+            
+            List<Personaje> personajes = personajeRepositorio.findByPeliculasSeries(respuestaPeliculaSerie.get());
+            
+            List<PersonajeSalidaDTO> personajesSalida = new ArrayList<>();
+            
+            for (Personaje personaje : personajes) {
+                
+                PersonajeSalidaDTO personajeSalida = personajeMapeador.
+                        personajeToPersonajeSalidaDTO(personaje);
+
+                personajesSalida.add(personajeSalida);
+                
+            }
+            
+            return personajesSalida;
+            
+        } else {
+            
+            return new ArrayList<>();
+            
+        }
+        
     }
 
-    @Override
-    public List<Personaje> buscarPersonajesPorPeso(float peso) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<Personaje> buscarPersonajesPorPeliculaSerie(Integer idPeliculaSerie) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
 }

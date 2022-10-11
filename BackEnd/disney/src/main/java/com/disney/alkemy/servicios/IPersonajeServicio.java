@@ -1,7 +1,12 @@
 package com.disney.alkemy.servicios;
 
+import com.disney.alkemy.dto.PersonajeDTO;
+import com.disney.alkemy.dto.PersonajeDetalleDTO;
 import com.disney.alkemy.entidades.Personaje;
 import java.util.List;
+import com.disney.alkemy.dto.PersonajeEntradaDTO;
+import com.disney.alkemy.dto.PersonajeSalidaDTO;
+import com.disney.alkemy.entidades.PeliculaSerie;
 
 /**
  *
@@ -10,22 +15,20 @@ import java.util.List;
 
 public interface IPersonajeServicio {
 
-    public List<Personaje> listarPersonajesPorNombreImagen();
+    public List<PersonajeDTO> listarPersonajesPorNombreImagen();
     
-    public boolean crearPersonaje(Personaje personaje);
+    public boolean crearPersonaje(PersonajeEntradaDTO personajeEntradaDto);
     
-    public boolean modificarPersonaje(Personaje personaje);
+    public boolean modificarPersonaje(PersonajeEntradaDTO personajeEntradaDto, Integer id);
     
     public boolean eliminarPersonaje(Integer id);
-
-    public List<Personaje> detallarPersonajeConSusPeliculasSeries(Integer id);
     
-    public List<Personaje> buscarPersonajesPorNombre(String nombre);
+    public List<PersonajeSalidaDTO> buscarPersonajesPorNombre(String nombre);
     
-    public List<Personaje> buscarPersonajesPorEdad(byte edad);
+    public List<PersonajeSalidaDTO> buscarPersonajesPorEdad(byte edad);
     
-    public List<Personaje> buscarPersonajesPorPeso(float peso);
+    public List<PersonajeSalidaDTO> buscarPersonajesPorPeso(float peso);
     
-    public List<Personaje> buscarPersonajesPorPeliculaSerie(Integer idPeliculaSerie);
+    public List<PersonajeSalidaDTO> buscarPersonajesPorPeliculaSerie(Integer idPeliculaSerie);
     
 }
