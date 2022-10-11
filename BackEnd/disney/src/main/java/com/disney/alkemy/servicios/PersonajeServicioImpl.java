@@ -1,6 +1,8 @@
 package com.disney.alkemy.servicios;
 
+import com.disney.alkemy.dto.PeliculaSeriePersonajeDTO;
 import com.disney.alkemy.dto.PersonajeDTO;
+import com.disney.alkemy.dto.PersonajeDetalleDTO;
 import com.disney.alkemy.entidades.Personaje;
 import com.disney.alkemy.mapeadores.PersonajeMapeador;
 import com.disney.alkemy.repositorios.PersonajeRepositorio;
@@ -12,6 +14,7 @@ import com.disney.alkemy.dto.PersonajeEntradaDTO;
 import com.disney.alkemy.dto.PersonajeSalidaDTO;
 import com.disney.alkemy.entidades.PeliculaSerie;
 import com.disney.alkemy.excepciones.PersonajeExcepcion;
+import com.disney.alkemy.mapeadores.PeliculaSerieMapeador;
 import com.disney.alkemy.repositorios.PeliculaSerieRepositorio;
 import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +34,13 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     private PeliculaSerieRepositorio peliculaSerieRepositorio;
 
     @Autowired
+    private PeliculaSerieServicioImpl peliculaSerieServicio;
+    
+    @Autowired
     private PersonajeMapeador personajeMapeador;
+    
+    @Autowired
+    private PeliculaSerieMapeador peliculaSerieMapeador;
 
     @Override
     public List<PersonajeDTO> listarPersonajesPorNombreImagen() {
@@ -124,24 +133,38 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
 
     }
 
-//    @Override
-//    public Personaje detallarPersonajeConSusPeliculasSeries(Integer id) {
-//        
-//        Optional<Personaje> respuesta = personajeRepositorio.findById(id);
-//        
-//        if(respuesta.isPresent()){
-//            
-//           Personaje personaje = respuesta.get();
-//           
-//            System.out.println("detalle pe: " + personaje.getPeliculasSeries());
-//           
-//            return personaje;
-//            
-//        }
-//        
-//        return new Personaje();
-//        
-//    }
+    @Override
+    public PersonajeDetalleDTO detallarPersonajeConSusPeliculasSeries(Integer id) {
+        
+        Optional<Personaje> respuesta = personajeRepositorio.findById(id);
+        
+        if(respuesta.isPresent()){
+            
+            PersonajeDetalleDTO personajeDetalle = personajeMapeador.personajeToPersonajeDetalleDTO(respuesta.get());
+            
+            List<PeliculaSerie> peliculasSeries = peliculaSerieServicio.buscarPeliculasSeriesPorPersonaje(id);
+            
+            List<PeliculaSeriePersonajeDTO> peliculasSeriesDto = new ArrayList<>();
+            
+            for (PeliculaSerie peliculaSerie : peliculasSeries) {
+                
+                PeliculaSeriePersonajeDTO peliculaSeriePersonajeDto = peliculaSerieMapeador.peliculaSerieToPeliculaSeriePersonajeDTO(peliculaSerie);
+                
+                peliculasSeriesDto.add(peliculaSeriePersonajeDto);
+                
+            }
+            
+            personajeDetalle.setPeliculasSeries(peliculasSeriesDto);
+            
+            return personajeDetalle;
+            
+        } else {
+            
+            return new PersonajeDetalleDTO();
+            
+        }
+        
+    }
 
     @Override
     public List<PersonajeSalidaDTO> buscarPersonajesPorNombre(String nombre) {

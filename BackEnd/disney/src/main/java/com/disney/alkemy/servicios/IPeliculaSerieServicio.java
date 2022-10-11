@@ -28,4 +28,6 @@ public interface IPeliculaSerieServicio {
     
     public List<PeliculaSerie> ordenarPeliculasSeriesPorFechaDeCreacionDesc();
     
+    public List<PeliculaSerie> buscarPeliculasSeriesPorPersonaje(Integer idPersonaje);
+    
 }
