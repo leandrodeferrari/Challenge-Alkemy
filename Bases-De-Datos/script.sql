@@ -57,6 +57,21 @@ CREATE TABLE IF NOT EXISTS personajes_peliculas_series(
 ALTER TABLE personajes_peliculas_series
 ADD CONSTRAINT UQ_personajes_peliculas_series_id_personaje_id_pelicula_serie UNIQUE (id_personaje, id_pelicula_serie);
 
+-- Tabla de usuarios, para Spring Security
+
+CREATE TABLE IF NOT EXISTS usuarios(
+	id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+    nombre VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    contrasenia VARCHAR(255) NOT NULL,
+    fecha_de_alta DATETIME NOT NULL,
+    rol VARCHAR(20) NOT NULL,
+    CONSTRAINT PK_usuarios_id PRIMARY KEY(id)
+);
+
+ALTER TABLE usuarios
+ALTER fecha_de_alta SET DEFAULT (CURRENT_TIMESTAMP());
+
 -- Insertar registros a nuestras tablas
 
 -- Tabla generos
