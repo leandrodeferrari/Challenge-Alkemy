@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.disney.alkemy.dto.PeliculaSerieDTO;
+import com.disney.alkemy.dto.PeliculaSerieDetalleDTO;
 import com.disney.alkemy.dto.PeliculaSerieEntradaDTO;
 import com.disney.alkemy.dto.PeliculaSerieSalidaDTO;
 import com.disney.alkemy.servicios.PeliculaSerieServicioImpl;
@@ -131,20 +132,20 @@ public class PeliculaSerieControlador {
         
     }
     
-//    @ApiOperation(value = "Detalle de la Pelicula/serie, con sus Personajes", notes = "Recibe por path, el ID de la Pelicula/serie")
-//    @ApiResponses(value = {
-//        @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieDetalleDTO.class),
-//        @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
-//        @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
-//    })
-//    @GetMapping("/detail/{id}")
-//    public ResponseEntity<PeliculaSerieDetalleDTO> detallarPeliculaSerie(@PathVariable("id") Integer id) {
-//
-//        PeliculaSerieDetalleDTO peliculaSerieDetalle = peliculaSerieServicio.detallarPeliculaSerieConSusPersonajes(id);
-//
-//        return new ResponseEntity<>(peliculaSerieDetalle, HttpStatus.OK);
-//
-//    }
+    @ApiOperation(value = "Detalle de la Pelicula/serie, con sus Personajes", notes = "Recibe por path, el ID de la Pelicula/serie")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieDetalleDTO.class),
+        @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
+        @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
+    })
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<PeliculaSerieDetalleDTO> detallarPeliculaSerie(@PathVariable("id") Integer id) {
+
+        PeliculaSerieDetalleDTO peliculaSerieDetalle = peliculaSerieServicio.detallarPeliculaSerieConSusPersonajes(id);
+
+        return new ResponseEntity<>(peliculaSerieDetalle, HttpStatus.OK);
+
+    }
     
     @ApiOperation(value = "Creación de pelicula/serie", notes = "Atributos que se necesita para la creación: Título, Imagen, Calificación y Nombre del Género, este último sin disntición de mayúsculas o minúsculas")
     @ApiResponses(value = {

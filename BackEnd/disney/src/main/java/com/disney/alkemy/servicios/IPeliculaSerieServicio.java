@@ -22,7 +22,7 @@ public interface IPeliculaSerieServicio {
     
     public boolean eliminarPeliculaSerie(Integer id);
     
-//    public PeliculaSerieDetalleDTO detallarPeliculaSerieConSusPersonajes(Integer id);
+    public PeliculaSerieDetalleDTO detallarPeliculaSerieConSusPersonajes(Integer id);
     
     public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorTitulo(String titulo);
     

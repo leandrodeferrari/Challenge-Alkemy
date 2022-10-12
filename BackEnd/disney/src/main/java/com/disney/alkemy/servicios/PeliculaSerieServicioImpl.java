@@ -1,14 +1,15 @@
 package com.disney.alkemy.servicios;
 
 import com.disney.alkemy.dto.PeliculaSerieDTO;
-//import com.disney.alkemy.dto.PeliculaSerieDetalleDTO;
+import com.disney.alkemy.dto.PeliculaSerieDetalleDTO;
 import com.disney.alkemy.dto.PeliculaSerieEntradaDTO;
 import com.disney.alkemy.dto.PeliculaSerieSalidaDTO;
-//import com.disney.alkemy.dto.PersonajeSalidaDTO;
+import com.disney.alkemy.dto.PersonajeSalidaDTO;
 import com.disney.alkemy.entidades.Genero;
 import com.disney.alkemy.entidades.PeliculaSerie;
 import com.disney.alkemy.entidades.Personaje;
 import com.disney.alkemy.mapeadores.PeliculaSerieMapeador;
+import com.disney.alkemy.mapeadores.PersonajeMapeador;
 import com.disney.alkemy.repositorios.GeneroRepositorio;
 import com.disney.alkemy.repositorios.PeliculaSerieRepositorio;
 import com.disney.alkemy.repositorios.PersonajeRepositorio;
@@ -37,11 +38,11 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Autowired
     private PeliculaSerieRepositorio peliculaSerieRepositorio;
     
-//    @Autowired
-//    private PersonajeServicioImpl personajeServicio;
-    
     @Autowired
     private PeliculaSerieMapeador peliculaSerieMapeador;
+    
+    @Autowired
+    private PersonajeMapeador personajeMapeador;
     
     @Override
     public List<PeliculaSerieDTO> listarPeliculasSeriesPorTituloImagenFechaDeCreacion() {
@@ -157,28 +158,42 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
         
     }
 
-//    @Override
-//    public PeliculaSerieDetalleDTO detallarPeliculaSerieConSusPersonajes(Integer id) {
-//        
-//        Optional<PeliculaSerie> respuesta = peliculaSerieRepositorio.findById(id);
-//        
-//        if(respuesta.isPresent()){
-//            
-//            PeliculaSerieDetalleDTO peliculaSerieDetalle = new PeliculaSerieDetalleDTO(); //personajeMapeador.personajeToPersonajeDetalleDTO(respuesta.get());
-//            
-//            List<PersonajeSalidaDTO> personajesSalida = personajeServicio.buscarPersonajesPorPeliculaSerie(id);
-//            
-//            peliculaSerieDetalle.setPersonajes(personajesSalida);
-//            
-//            return peliculaSerieDetalle;
-//            
-//        } else {
-//            
-//            return new PeliculaSerieDetalleDTO();
-//            
-//        }
-//        
-//    }
+    @Override
+    public PeliculaSerieDetalleDTO detallarPeliculaSerieConSusPersonajes(Integer id) {
+        
+        Optional<PeliculaSerie> respuesta = peliculaSerieRepositorio.findById(id);
+        
+        if(respuesta.isPresent()){
+            
+            PeliculaSerieDetalleDTO peliculaSerieDetalle = peliculaSerieMapeador.peliculaSerieToPeliculaSerieDetalleDTO(respuesta.get());
+            
+            List<Personaje> personajes = personajeRepositorio.findByPeliculasSeries(respuesta.get());
+            
+            if(!personajes.isEmpty()){
+                
+                List<PersonajeSalidaDTO> personajesSalidaDto = new ArrayList<>();
+                
+                for (Personaje personaje : personajes) {
+                    
+                    PersonajeSalidaDTO personajeSalida = personajeMapeador.personajeToPersonajeSalidaDTO(personaje);
+                    
+                    personajesSalidaDto.add(personajeSalida);
+                    
+                }
+                
+                peliculaSerieDetalle.setPersonajes(personajesSalidaDto);
+                
+            }
+            
+            return peliculaSerieDetalle;
+            
+        } else {
+            
+            return new PeliculaSerieDetalleDTO();
+            
+        }
+        
+    }
 
     @Override
     public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorTitulo(String titulo) {
