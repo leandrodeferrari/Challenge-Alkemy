@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +40,7 @@ public class PersonajeControlador {
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
         @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
     })
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<PersonajeDTO>> mostrarListadoDePersonajes() {
 
         List<PersonajeDTO> listaPersonajes = personajeServicio.listarPersonajesPorNombreImagen();
@@ -65,7 +64,7 @@ public class PersonajeControlador {
         @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
     })
     @GetMapping("/search")
-    public ResponseEntity<List<PersonajeSalidaDTO>> filtrarPorNombre(@RequestParam("name") String name) {
+    public ResponseEntity<List<PersonajeSalidaDTO>> buscarPorNombre(@RequestParam("name") String name) {
 
         List<PersonajeSalidaDTO> personajes = personajeServicio.buscarPersonajesPorNombre(name);
 
@@ -163,7 +162,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Edición de personajes", notes = "Pasar ID por el path y los atributos que se necesitan para la creación, son: Edad, Peso, Imagen, Nombre e Historia")
+    @ApiOperation(value = "Edición de personajes", notes = "Pasar ID por el path y los atributos que se necesitan para la edición, son: Edad, Peso, Imagen, Nombre e Historia")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se editó correctamente", response = PersonajeEntradaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo editar el recurso, debido a una falla en el cliente", response = String.class),
@@ -190,7 +189,6 @@ public class PersonajeControlador {
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo eliminar el recurso, debido a una falla en el cliente", response = String.class),
         @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
     })
-    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarPersonaje(@PathVariable("id") Integer id) {
 

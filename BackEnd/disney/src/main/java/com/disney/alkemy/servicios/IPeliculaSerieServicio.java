@@ -1,5 +1,9 @@
 package com.disney.alkemy.servicios;
 
+import com.disney.alkemy.dto.PeliculaSerieDTO;
+import com.disney.alkemy.dto.PeliculaSerieEntradaDTO;
+import com.disney.alkemy.dto.PeliculaSerieSalidaDTO;
+import com.disney.alkemy.dto.PeliculaSerieDetalleDTO;
 import com.disney.alkemy.entidades.PeliculaSerie;
 import java.util.List;
 
@@ -10,23 +14,23 @@ import java.util.List;
 
 public interface IPeliculaSerieServicio {
 
-    public List<PeliculaSerie> listarPeliculasSeriesPorTituloImagenFechaDeCreacion();
+    public List<PeliculaSerieDTO> listarPeliculasSeriesPorTituloImagenFechaDeCreacion();
     
-    public boolean crearPeliculaSerie(PeliculaSerie peliculaSerie);
+    public boolean crearPeliculaSerie(PeliculaSerieEntradaDTO peliculaSerieEntradaDto);
     
-    public boolean modificarPeliculaSerie(PeliculaSerie peliculaSerie);
+    public boolean modificarPeliculaSerie(PeliculaSerieEntradaDTO peliculaSerieEntradaDto, Integer id);
     
     public boolean eliminarPeliculaSerie(Integer id);
     
-    public List<PeliculaSerie> detallarPeliculaSerieConSusPersonajes(Integer id);
+//    public PeliculaSerieDetalleDTO detallarPeliculaSerieConSusPersonajes(Integer id);
     
-    public List<PeliculaSerie> buscarPeliculasSeriesPorNombre(String nombre);
+    public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorTitulo(String titulo);
     
-    public List<PeliculaSerie> buscarPeliculasSeriesPorGenero(Integer idGenero);
+    public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorGenero(Integer idGenero);
 
-    public List<PeliculaSerie> ordenarPeliculasSeriesPorFechaDeCreacionAsc();
+    public List<PeliculaSerieSalidaDTO> ordenarPeliculasSeriesPorFechaDeCreacionAsc();
     
-    public List<PeliculaSerie> ordenarPeliculasSeriesPorFechaDeCreacionDesc();
+    public List<PeliculaSerieSalidaDTO> ordenarPeliculasSeriesPorFechaDeCreacionDesc();
     
     public List<PeliculaSerie> buscarPeliculasSeriesPorPersonaje(Integer idPersonaje);
     

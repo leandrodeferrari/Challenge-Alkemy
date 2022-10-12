@@ -8,10 +8,12 @@ import lombok.Data;
  */
 
 @Data
-public class PeliculaSerieEntradaDTO {
-    
+public class PeliculaSerieSalidaDTO {
+
+    private Integer id;
     private String titulo;
     private String imagen;
+    private String fechaDeCreacion;
     private byte calificacion;
     private String nombreGenero;
     

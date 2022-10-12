@@ -1,6 +1,7 @@
 package com.disney.alkemy.repositorios;
 
 import com.disney.alkemy.entidades.Genero;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GeneroRepositorio extends JpaRepository<Genero, Integer> {
 
-    
+    public Optional<Genero> findByNombre(String nombre);
     
 }
