@@ -72,6 +72,9 @@ CREATE TABLE IF NOT EXISTS usuarios(
 ALTER TABLE usuarios
 ALTER fecha_de_alta SET DEFAULT (CURRENT_TIMESTAMP());
 
+ALTER TABLE usuarios
+ADD CONSTRAINT UQ_usuarios_email UNIQUE(email);
+
 -- Insertar registros a nuestras tablas
 
 -- Tabla generos
