@@ -8,6 +8,9 @@ import com.disney.alkemy.dto.PersonajeSalidaDTO;
 import com.disney.alkemy.entidades.Genero;
 import com.disney.alkemy.entidades.PeliculaSerie;
 import com.disney.alkemy.entidades.Personaje;
+import com.disney.alkemy.excepciones.GeneroExcepcion;
+import com.disney.alkemy.excepciones.PeliculaSerieExcepcion;
+import com.disney.alkemy.excepciones.PersonajeExcepcion;
 import com.disney.alkemy.mapeadores.PeliculaSerieMapeador;
 import com.disney.alkemy.mapeadores.PersonajeMapeador;
 import com.disney.alkemy.repositorios.GeneroRepositorio;
@@ -25,126 +28,137 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Leandro Deferrari
  */
-
 @Service
 public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
 
     @Autowired
     private PersonajeRepositorio personajeRepositorio;
-    
+
     @Autowired
     private GeneroRepositorio generoRepositorio;
-    
+
     @Autowired
     private PeliculaSerieRepositorio peliculaSerieRepositorio;
-    
+
     @Autowired
     private PeliculaSerieMapeador peliculaSerieMapeador;
-    
+
     @Autowired
     private PersonajeMapeador personajeMapeador;
-    
+
     @Override
     public List<PeliculaSerieDTO> listarPeliculasSeriesPorTituloImagenFechaDeCreacion() {
-        
+
         List<PeliculaSerieDTO> peliculasSeriesDto = new ArrayList<>();
-        
+
         List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.consultarPeliculasSeries();
         
-        if(!peliculasSeries.isEmpty()){
+        if (!peliculasSeries.isEmpty()) {
             
             for (PeliculaSerie peliculaSerie : peliculasSeries) {
                 
-                PeliculaSerieDTO peliculaSerieDto = peliculaSerieMapeador.peliculaSerieToPeliculaSerieDTO(peliculaSerie);
+                PeliculaSerieDTO peliculaSerieDto = peliculaSerieMapeador.
+                        peliculaSerieToPeliculaSerieDTO(peliculaSerie);
                 
                 peliculasSeriesDto.add(peliculaSerieDto);
                 
             }
             
         }
-        
+
         return peliculasSeriesDto;
-        
+
     }
 
     @Transactional
     @Override
     public boolean crearPeliculaSerie(PeliculaSerieEntradaDTO peliculaSerieEntradaDto) {
+
+        validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
         
-        Optional<Genero> respuesta = generoRepositorio.findByNombre(peliculaSerieEntradaDto.getNombreGenero());
-        
-        if(respuesta.isPresent()){
-            
-            Genero genero = respuesta.get();
-            
+        Optional<Genero> opcionalGenero = generoRepositorio.
+                findByNombre(peliculaSerieEntradaDto.getNombreGenero());
+
+        if (opcionalGenero.isPresent()) {
+
+            Genero genero = opcionalGenero.get();
+
             LocalDateTime fechaDeCreacion = LocalDateTime.now();
-            
-            PeliculaSerie peliculaSerie = peliculaSerieMapeador.peliculaSerieEntradaDTOToPeliculaSerie(peliculaSerieEntradaDto);
-            
+
+            PeliculaSerie peliculaSerie = peliculaSerieMapeador.
+                    peliculaSerieEntradaDTOToPeliculaSerie(peliculaSerieEntradaDto);
+
             peliculaSerie.setGenero(genero);
-            
+
             peliculaSerie.setFechaDeCreacion(fechaDeCreacion);
-            
+
             peliculaSerieRepositorio.save(peliculaSerie);
-            
+
             return true;
-            
+
         } else {
-            
-            return false;
-            
+
+            throw new GeneroExcepcion("No existe ese género");
+
         }
-        
+
     }
 
     @Transactional
     @Override
     public boolean modificarPeliculaSerie(PeliculaSerieEntradaDTO peliculaSerieEntradaDto, Integer id) {
+
+        validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
         
-        Optional<PeliculaSerie> respuesta = peliculaSerieRepositorio.findById(id);
+        validarId(id);
+        
+        Optional<PeliculaSerie> opcionalPeliculaSerie = peliculaSerieRepositorio.findById(id);
 
-        if (respuesta.isPresent()) {
+        if (opcionalPeliculaSerie.isPresent()) {
 
-            PeliculaSerie peliculaSerie = respuesta.get();
+            PeliculaSerie peliculaSerie = opcionalPeliculaSerie.get();
 
-            PeliculaSerie peliculaSerieAuxiliar = peliculaSerieMapeador.peliculaSerieEntradaDTOToPeliculaSerie(peliculaSerieEntradaDto);
+            PeliculaSerie peliculaSerieAuxiliar = peliculaSerieMapeador.
+                    peliculaSerieEntradaDTOToPeliculaSerie(peliculaSerieEntradaDto);
 
             peliculaSerieAuxiliar.setId(peliculaSerie.getId());
             peliculaSerieAuxiliar.setPersonajes(peliculaSerie.getPersonajes());
             peliculaSerieAuxiliar.setFechaDeCreacion(peliculaSerie.getFechaDeCreacion());
-            
-            Optional<Genero> respuestaGenero = generoRepositorio.findByNombre(peliculaSerieEntradaDto.getNombreGenero());
-            
-            if(respuestaGenero.isPresent()){
-                
-                peliculaSerieAuxiliar.setGenero(respuestaGenero.get());
-                
+
+            Optional<Genero> opcionalGenero = generoRepositorio.
+                    findByNombre(peliculaSerieEntradaDto.getNombreGenero());
+
+            if (opcionalGenero.isPresent()) {
+
+                peliculaSerieAuxiliar.setGenero(opcionalGenero.get());
+
             } else {
-                
-                return false;
-                
+
+                throw new GeneroExcepcion("No existe ese género");
+
             }
-            
+
             peliculaSerieRepositorio.save(peliculaSerieAuxiliar);
 
             return true;
 
         } else {
 
-            return false;
+            throw new PeliculaSerieExcepcion("No existe esa pelicula/serie");
 
         }
-        
-        
+
     }
 
     @Transactional
     @Override
     public boolean eliminarPeliculaSerie(Integer id) {
-        
-        Optional<PeliculaSerie> respuesta = peliculaSerieRepositorio.findById(id);
 
-        if (respuesta.isPresent()) {
+        validarId(id);
+        
+        Optional<PeliculaSerie> opcionalPeliculaSerie = peliculaSerieRepositorio.findById(id);
+
+        if (opcionalPeliculaSerie.isPresent()) {
 
             peliculaSerieRepositorio.deleteById(id);
 
@@ -152,164 +166,235 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
 
         } else {
 
-            return false;
+            throw new PeliculaSerieExcepcion("No existe esa pelicula/serie");
 
         }
-        
+
     }
 
     @Override
     public PeliculaSerieDetalleDTO detallarPeliculaSerieConSusPersonajes(Integer id) {
+
+        validarId(id);
         
-        Optional<PeliculaSerie> respuesta = peliculaSerieRepositorio.findById(id);
-        
-        if(respuesta.isPresent()){
-            
-            PeliculaSerieDetalleDTO peliculaSerieDetalle = peliculaSerieMapeador.peliculaSerieToPeliculaSerieDetalleDTO(respuesta.get());
-            
-            List<Personaje> personajes = personajeRepositorio.findByPeliculasSeries(respuesta.get());
-            
-            if(!personajes.isEmpty()){
-                
+        Optional<PeliculaSerie> opcionalPeliculaSerie = peliculaSerieRepositorio.findById(id);
+
+        if (opcionalPeliculaSerie.isPresent()) {
+
+            PeliculaSerieDetalleDTO peliculaSerieDetalle = peliculaSerieMapeador.
+                    peliculaSerieToPeliculaSerieDetalleDTO(opcionalPeliculaSerie.get());
+
+            List<Personaje> personajes = personajeRepositorio.
+                    findByPeliculasSeries(opcionalPeliculaSerie.get());
+
+            if (!personajes.isEmpty()) {
+
                 List<PersonajeSalidaDTO> personajesSalidaDto = new ArrayList<>();
-                
+
                 for (Personaje personaje : personajes) {
-                    
-                    PersonajeSalidaDTO personajeSalida = personajeMapeador.personajeToPersonajeSalidaDTO(personaje);
-                    
+
+                    PersonajeSalidaDTO personajeSalida = personajeMapeador.
+                            personajeToPersonajeSalidaDTO(personaje);
+
                     personajesSalidaDto.add(personajeSalida);
-                    
+
                 }
-                
+
                 peliculaSerieDetalle.setPersonajes(personajesSalidaDto);
-                
+
             }
-            
+
             return peliculaSerieDetalle;
-            
+
         } else {
-            
-            return new PeliculaSerieDetalleDTO();
-            
+
+            throw new PeliculaSerieExcepcion("No existe esa pelicula/serie");
+
         }
-        
+
     }
 
     @Override
     public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorTitulo(String titulo) {
+
+        validarTitulo(titulo);
         
         List<PeliculaSerieSalidaDTO> peliculasSeriesSalidaDto = new ArrayList<>();
-        
+
         List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.findByTitulo(titulo);
-        
-        if(!peliculasSeries.isEmpty()){
-            
+
+        if (!peliculasSeries.isEmpty()) {
+
             for (PeliculaSerie peliculaSerie : peliculasSeries) {
-                
-                PeliculaSerieSalidaDTO peliculaSerieDto = peliculaSerieMapeador.peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
-                
-                peliculasSeriesSalidaDto.add(peliculaSerieDto);
-                
+
+                PeliculaSerieSalidaDTO peliculaSalida = peliculaSerieMapeador.
+                        peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
+
+                peliculasSeriesSalidaDto.add(peliculaSalida);
+
             }
-            
+
         }
-        
+
         return peliculasSeriesSalidaDto;
-        
+
     }
 
     @Override
     public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorGenero(Integer idGenero) {
+
+        validarId(idGenero);
         
-        Optional<Genero> respuesta = generoRepositorio.findById(idGenero);
-        
-        if(respuesta.isPresent()){
-            
-            List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.findByGenero(respuesta.get());
-            
+        Optional<Genero> opcionalGenero = generoRepositorio.findById(idGenero);
+
+        if (opcionalGenero.isPresent()) {
+
+            List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.
+                    findByGenero(opcionalGenero.get());
+
             List<PeliculaSerieSalidaDTO> peliculasaSeriesSalida = new ArrayList<>();
-            
-            for (PeliculaSerie peliculaSerie : peliculasSeries) {
-                
-                PeliculaSerieSalidaDTO peliculaSerieSalida = peliculaSerieMapeador.peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
-                
-                peliculasaSeriesSalida.add(peliculaSerieSalida);
-                
+
+            if (!peliculasSeries.isEmpty()) {
+
+                for (PeliculaSerie peliculaSerie : peliculasSeries) {
+
+                    PeliculaSerieSalidaDTO peliculaSerieSalida = peliculaSerieMapeador.
+                            peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
+
+                    peliculasaSeriesSalida.add(peliculaSerieSalida);
+
+                }
+
             }
-            
+
             return peliculasaSeriesSalida;
-            
+
         } else {
-            
-            return new ArrayList<>();
-            
+
+            throw new GeneroExcepcion("No existe ese género");
+
         }
-        
+
     }
 
     @Override
     public List<PeliculaSerieSalidaDTO> ordenarPeliculasSeriesPorFechaDeCreacionAsc() {
-        
+
         List<PeliculaSerieSalidaDTO> peliculasSeriesSalida = new ArrayList<>();
-        
-        List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.ordenarPeliculasSeriesPorFechaDeCreacionAsc();
-        
-        if(!peliculasSeries.isEmpty()){
-            
+
+        List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.
+                ordenarPeliculasSeriesPorFechaDeCreacionAsc();
+
+        if (!peliculasSeries.isEmpty()) {
+
             for (PeliculaSerie peliculaSerie : peliculasSeries) {
-                
-                PeliculaSerieSalidaDTO peliculaSerieSalida = peliculaSerieMapeador.peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
-                
+
+                PeliculaSerieSalidaDTO peliculaSerieSalida = peliculaSerieMapeador.
+                        peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
+
                 peliculasSeriesSalida.add(peliculaSerieSalida);
-                
+
             }
-            
+
         }
-        
+
         return peliculasSeriesSalida;
-        
+
     }
 
     @Override
     public List<PeliculaSerieSalidaDTO> ordenarPeliculasSeriesPorFechaDeCreacionDesc() {
-        
+
         List<PeliculaSerieSalidaDTO> peliculasSeriesSalida = new ArrayList<>();
-        
-        List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.ordenarPeliculasSeriesPorFechaDeCreacionDesc();
-        
-        if(!peliculasSeries.isEmpty()){
-            
+
+        List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.
+                ordenarPeliculasSeriesPorFechaDeCreacionDesc();
+
+        if (!peliculasSeries.isEmpty()) {
+
             for (PeliculaSerie peliculaSerie : peliculasSeries) {
-                
-                PeliculaSerieSalidaDTO peliculaSerieSalida = peliculaSerieMapeador.peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
-                
+
+                PeliculaSerieSalidaDTO peliculaSerieSalida = peliculaSerieMapeador.
+                        peliculaSerieToPeliculaSerieSalidaDTO(peliculaSerie);
+
                 peliculasSeriesSalida.add(peliculaSerieSalida);
-                
+
             }
+
+        }
+
+        return peliculasSeriesSalida;
+
+    }
+
+    @Override
+    public List<PeliculaSerie> buscarPeliculasSeriesPorPersonaje(Integer idPersonaje) {
+
+        validarId(idPersonaje);
+        
+        Optional<Personaje> opcionalPersonaje = personajeRepositorio.findById(idPersonaje);
+
+        if (opcionalPersonaje.isPresent()) {
+
+            List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.
+                    findByPersonajes(opcionalPersonaje.get());
+
+            return peliculasSeries;
+
+        } else {
+
+            throw new PersonajeExcepcion("No existe ese personaje");
+
+        }
+
+    }
+    
+    private void validarId(Integer id){
+        
+        if(id == null || id <= 0){
+            
+            throw new RuntimeException("Id inválido o incorrecto");
             
         }
         
-        return peliculasSeriesSalida;
+    }
+
+    private void validarTitulo(String titulo){
+        
+        if(titulo == null || titulo.isEmpty()){
+            
+            throw new PeliculaSerieExcepcion("Título inválido o vacío");
+            
+        }
         
     }
     
-    @Override
-     public List<PeliculaSerie> buscarPeliculasSeriesPorPersonaje(Integer idPersonaje){
-         
-        Optional<Personaje> respuestaPersonaje = personajeRepositorio.findById(idPersonaje);
+    private void validarPeliculaSerieEntradaDto(PeliculaSerieEntradaDTO peliculaSerieEntrada){
         
-        if(respuestaPersonaje.isPresent()){
+        validarTitulo(peliculaSerieEntrada.getTitulo());
+        validarImagen(peliculaSerieEntrada.getImagen());
+        validarCalificacion(peliculaSerieEntrada.getCalificacion());
+        
+    }
+    
+    private void validarImagen(String imagen){
+        
+        if(imagen == null || imagen.isEmpty()){
             
-            List<PeliculaSerie> peliculasSeries = peliculaSerieRepositorio.findByPersonajes(respuestaPersonaje.get());
-            
-            return peliculasSeries;
-            
-        } else {
-            
-            return new ArrayList<>();
+            throw new PeliculaSerieExcepcion("Imagen inválida o vacía");
             
         }
-         
-     }
+        
+    }
+    
+    private void validarCalificacion(byte calificacion){
+        
+        if(calificacion < 0 && calificacion > 5){
+            
+            throw new PeliculaSerieExcepcion("Calificación fuera de rango");
+            
+        }
+        
+    }
     
 }
