@@ -8,6 +8,7 @@ import com.disney.alkemy.dto.PeliculaSerieDTO;
 import com.disney.alkemy.dto.PeliculaSerieDetalleDTO;
 import com.disney.alkemy.dto.PeliculaSerieEntradaDTO;
 import com.disney.alkemy.dto.PeliculaSerieSalidaDTO;
+import com.disney.alkemy.excepciones.PeliculaSerieExcepcion;
 import com.disney.alkemy.servicios.PeliculaSerieServicioImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -43,7 +44,8 @@ public class PeliculaSerieControlador {
     @GetMapping
     public ResponseEntity<List<PeliculaSerieDTO>> mostrarListadoDePeliculasSeries(){
         
-        List<PeliculaSerieDTO> peliculasSeriesDto = peliculaSerieServicio.listarPeliculasSeriesPorTituloImagenFechaDeCreacion();
+        List<PeliculaSerieDTO> peliculasSeriesDto = peliculaSerieServicio.
+                listarPeliculasSeriesPorTituloImagenFechaDeCreacion();
         
         if(peliculasSeriesDto != null) {
             
@@ -51,13 +53,13 @@ public class PeliculaSerieControlador {
             
         } else {
             
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             
         }
         
     }
     
-    @ApiOperation(value = "Listado de peliculas/series, filtrados por título", notes = "Recibe, como parámetro, un título (String, longitud máx: 30)")
+    @ApiOperation(value = "Listado de peliculas/series, buscados por título", notes = "Recibe, como parámetro, un título (String, longitud máx: 30)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -66,7 +68,18 @@ public class PeliculaSerieControlador {
     @GetMapping("/search")
     public ResponseEntity<List<PeliculaSerieSalidaDTO>> buscarPorTitulo(@RequestParam("title") String title){
         
-        List<PeliculaSerieSalidaDTO> peliculasSeriesSalida = peliculaSerieServicio.buscarPeliculasSeriesPorTitulo(title);
+        try {
+            
+            validarTitulo(title);
+            
+        } catch (PeliculaSerieExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
+        List<PeliculaSerieSalidaDTO> peliculasSeriesSalida = peliculaSerieServicio.
+                buscarPeliculasSeriesPorTitulo(title);
 
         if (peliculasSeriesSalida != null) {
 
@@ -74,7 +87,7 @@ public class PeliculaSerieControlador {
 
         } else {
         
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         
         }
         
@@ -89,6 +102,16 @@ public class PeliculaSerieControlador {
     @GetMapping("/filter-genre")
     public ResponseEntity<List<PeliculaSerieSalidaDTO>> filtrarPorGenero(@RequestParam("idGenre") Integer idGenre){
         
+        try {
+            
+            validarId(idGenre);
+            
+        } catch (PeliculaSerieExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         List<PeliculaSerieSalidaDTO> peliculasSeriesSalida = peliculaSerieServicio.buscarPeliculasSeriesPorGenero(idGenre);
 
         if (peliculasSeriesSalida != null) {
@@ -97,7 +120,7 @@ public class PeliculaSerieControlador {
 
         } else {
         
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         
         }
         
@@ -111,6 +134,16 @@ public class PeliculaSerieControlador {
     })
     @GetMapping("/order")
     public ResponseEntity<List<PeliculaSerieSalidaDTO>> ordenarPeliculasSeries(@RequestParam("mode") String mode){
+        
+        try {
+            
+            validarModoDeOrdenamiento(mode);
+            
+        } catch (PeliculaSerieExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
         
         if(mode.equalsIgnoreCase("asc")){
             
@@ -126,7 +159,7 @@ public class PeliculaSerieControlador {
             
         } else {
             
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             
         }
         
@@ -141,7 +174,18 @@ public class PeliculaSerieControlador {
     @GetMapping("/detail/{id}")
     public ResponseEntity<PeliculaSerieDetalleDTO> detallarPeliculaSerie(@PathVariable("id") Integer id) {
 
-        PeliculaSerieDetalleDTO peliculaSerieDetalle = peliculaSerieServicio.detallarPeliculaSerieConSusPersonajes(id);
+        try {
+            
+            validarId(id);
+            
+        } catch (PeliculaSerieExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
+        PeliculaSerieDetalleDTO peliculaSerieDetalle = peliculaSerieServicio.
+                detallarPeliculaSerieConSusPersonajes(id);
 
         return new ResponseEntity<>(peliculaSerieDetalle, HttpStatus.OK);
 
@@ -156,13 +200,23 @@ public class PeliculaSerieControlador {
     @PostMapping("/create-movie")
     public ResponseEntity<PeliculaSerieEntradaDTO> crearPeliculaSerie(@RequestBody PeliculaSerieEntradaDTO peliculaSerieEntradaDto){
         
+        try {
+            
+            validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
+            
+        } catch (PeliculaSerieExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         if(peliculaSerieServicio.crearPeliculaSerie(peliculaSerieEntradaDto)){
             
             return new ResponseEntity<>(peliculaSerieEntradaDto, HttpStatus.CREATED);
             
         } else {
             
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             
         }
         
@@ -175,15 +229,26 @@ public class PeliculaSerieControlador {
         @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<PeliculaSerieEntradaDTO> editarPersonaje(@PathVariable("id") Integer id, @RequestBody PeliculaSerieEntradaDTO peliculaSerieEntradaDTO) {
+    public ResponseEntity<PeliculaSerieEntradaDTO> editarPersonaje(@PathVariable("id") Integer id, @RequestBody PeliculaSerieEntradaDTO peliculaSerieEntradaDto) {
 
-        if (peliculaSerieServicio.modificarPeliculaSerie(peliculaSerieEntradaDTO, id)) {
+        try {
+            
+            validarId(id);
+            validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
+            
+        } catch (PeliculaSerieExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
+        if (peliculaSerieServicio.modificarPeliculaSerie(peliculaSerieEntradaDto, id)) {
 
-            return new ResponseEntity<>(peliculaSerieEntradaDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(peliculaSerieEntradaDto, HttpStatus.CREATED);
 
         } else {
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
@@ -196,18 +261,86 @@ public class PeliculaSerieControlador {
         @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarPersonaje(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> eliminarPersonaje(@PathVariable("id") Integer id) {
 
+        try {
+            
+            validarId(id);
+            
+        } catch (PeliculaSerieExcepcion ex) {
+            
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            
+        }
+        
         if (peliculaSerieServicio.eliminarPeliculaSerie(id)) {
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         } else {
 
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
+    }
+    
+    private void validarId(Integer id){
+        
+        if(id == null || id <= 0){
+            
+            throw new PeliculaSerieExcepcion("Id inválido o nulo");
+            
+        }
+        
+    }
+    
+    private void validarPeliculaSerieEntradaDto(PeliculaSerieEntradaDTO peliculaSerieEntrada){
+        
+        validarTitulo(peliculaSerieEntrada.getTitulo());
+        validarImagen(peliculaSerieEntrada.getImagen());
+        validarCalificacion(peliculaSerieEntrada.getCalificacion());
+        
+    }
+    
+        private void validarTitulo(String titulo){
+        
+        if(titulo == null || titulo.isEmpty() || titulo.length() > 30){
+            
+            throw new PeliculaSerieExcepcion("Título inválido, demasiado largo o vacío");
+            
+        }
+        
+    }
+    
+    private void validarImagen(String imagen){
+        
+        if(imagen == null || imagen.isEmpty() || imagen.length() > 30){
+            
+            throw new PeliculaSerieExcepcion("Imagen inválida, demasiada larga o vacía");
+            
+        }
+        
+    }
+    
+    private void validarCalificacion(byte calificacion){
+        
+        if(calificacion < 0 || calificacion > 5){
+            
+            throw new PeliculaSerieExcepcion("Calificación fuera de rango");
+            
+        }
+        
+    }
+    
+    private void validarModoDeOrdenamiento(String modo){
+        
+        if(modo.isEmpty() || modo.length() > 4){
+            
+            throw new PeliculaSerieExcepcion("Modo fuera de rango o no ha ingresado opciones correctas");
+            
+        }
+        
     }
     
 }
