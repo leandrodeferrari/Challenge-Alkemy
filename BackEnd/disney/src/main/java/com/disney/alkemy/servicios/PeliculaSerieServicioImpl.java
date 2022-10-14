@@ -16,6 +16,7 @@ import com.disney.alkemy.mapeadores.PersonajeMapeador;
 import com.disney.alkemy.repositorios.GeneroRepositorio;
 import com.disney.alkemy.repositorios.PeliculaSerieRepositorio;
 import com.disney.alkemy.repositorios.PersonajeRepositorio;
+import com.disney.alkemy.validaciones.PeliculaSerieValidacion;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Override
     public boolean crearPeliculaSerie(PeliculaSerieEntradaDTO peliculaSerieEntradaDto) {
 
-        validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
+        PeliculaSerieValidacion.validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
         
         Optional<Genero> opcionalGenero = generoRepositorio.
                 findByNombre(peliculaSerieEntradaDto.getNombreGenero());
@@ -108,9 +109,8 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Override
     public boolean modificarPeliculaSerie(PeliculaSerieEntradaDTO peliculaSerieEntradaDto, Integer id) {
 
-        validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
-        
-        validarId(id);
+        PeliculaSerieValidacion.validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);  
+        PeliculaSerieValidacion.validarId(id);
         
         Optional<PeliculaSerie> opcionalPeliculaSerie = peliculaSerieRepositorio.findById(id);
 
@@ -154,7 +154,7 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Override
     public boolean eliminarPeliculaSerie(Integer id) {
 
-        validarId(id);
+        PeliculaSerieValidacion.validarId(id);
         
         Optional<PeliculaSerie> opcionalPeliculaSerie = peliculaSerieRepositorio.findById(id);
 
@@ -175,7 +175,7 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Override
     public PeliculaSerieDetalleDTO detallarPeliculaSerieConSusPersonajes(Integer id) {
 
-        validarId(id);
+        PeliculaSerieValidacion.validarId(id);
         
         Optional<PeliculaSerie> opcionalPeliculaSerie = peliculaSerieRepositorio.findById(id);
 
@@ -217,7 +217,7 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Override
     public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorTitulo(String titulo) {
 
-        validarTitulo(titulo);
+        PeliculaSerieValidacion.validarTitulo(titulo);
         
         List<PeliculaSerieSalidaDTO> peliculasSeriesSalidaDto = new ArrayList<>();
 
@@ -243,7 +243,7 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Override
     public List<PeliculaSerieSalidaDTO> buscarPeliculasSeriesPorGenero(Integer idGenero) {
 
-        validarId(idGenero);
+        PeliculaSerieValidacion.validarId(idGenero);
         
         Optional<Genero> opcionalGenero = generoRepositorio.findById(idGenero);
 
@@ -330,7 +330,7 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     @Override
     public List<PeliculaSerie> buscarPeliculasSeriesPorPersonaje(Integer idPersonaje) {
 
-        validarId(idPersonaje);
+        PeliculaSerieValidacion.validarId(idPersonaje);
         
         Optional<Personaje> opcionalPersonaje = personajeRepositorio.findById(idPersonaje);
 
@@ -347,54 +347,6 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
 
         }
 
-    }
-    
-    private void validarId(Integer id){
-        
-        if(id == null || id <= 0){
-            
-            throw new RuntimeException("Id inválido o incorrecto");
-            
-        }
-        
-    }
-
-    private void validarTitulo(String titulo){
-        
-        if(titulo == null || titulo.isEmpty() || titulo.length() > 30){
-            
-            throw new PeliculaSerieExcepcion("Título inválido, demasiado largo o vacío");
-            
-        }
-        
-    }
-    
-    private void validarPeliculaSerieEntradaDto(PeliculaSerieEntradaDTO peliculaSerieEntrada){
-        
-        validarTitulo(peliculaSerieEntrada.getTitulo());
-        validarImagen(peliculaSerieEntrada.getImagen());
-        validarCalificacion(peliculaSerieEntrada.getCalificacion());
-        
-    }
-    
-    private void validarImagen(String imagen){
-        
-        if(imagen == null || imagen.isEmpty() || imagen.length() > 30){
-            
-            throw new PeliculaSerieExcepcion("Imagen inválida, demasiada larga o vacía");
-            
-        }
-        
-    }
-    
-    private void validarCalificacion(byte calificacion){
-        
-        if(calificacion < 0 || calificacion > 5){
-            
-            throw new PeliculaSerieExcepcion("Calificación fuera de rango");
-            
-        }
-        
     }
     
 }

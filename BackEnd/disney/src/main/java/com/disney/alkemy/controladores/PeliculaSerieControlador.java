@@ -10,6 +10,7 @@ import com.disney.alkemy.dto.PeliculaSerieEntradaDTO;
 import com.disney.alkemy.dto.PeliculaSerieSalidaDTO;
 import com.disney.alkemy.excepciones.PeliculaSerieExcepcion;
 import com.disney.alkemy.servicios.PeliculaSerieServicioImpl;
+import com.disney.alkemy.validaciones.PeliculaSerieValidacion;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -70,7 +71,7 @@ public class PeliculaSerieControlador {
         
         try {
             
-            validarTitulo(title);
+            PeliculaSerieValidacion.validarTitulo(title);
             
         } catch (PeliculaSerieExcepcion ex) {
             
@@ -104,7 +105,7 @@ public class PeliculaSerieControlador {
         
         try {
             
-            validarId(idGenre);
+            PeliculaSerieValidacion.validarId(idGenre);
             
         } catch (PeliculaSerieExcepcion ex) {
             
@@ -176,7 +177,7 @@ public class PeliculaSerieControlador {
 
         try {
             
-            validarId(id);
+            PeliculaSerieValidacion.validarId(id);
             
         } catch (PeliculaSerieExcepcion ex) {
             
@@ -202,7 +203,7 @@ public class PeliculaSerieControlador {
         
         try {
             
-            validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
+            PeliculaSerieValidacion.validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
             
         } catch (PeliculaSerieExcepcion ex) {
             
@@ -233,8 +234,8 @@ public class PeliculaSerieControlador {
 
         try {
             
-            validarId(id);
-            validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
+            PeliculaSerieValidacion.validarId(id);
+            PeliculaSerieValidacion.validarPeliculaSerieEntradaDto(peliculaSerieEntradaDto);
             
         } catch (PeliculaSerieExcepcion ex) {
             
@@ -265,7 +266,7 @@ public class PeliculaSerieControlador {
 
         try {
             
-            validarId(id);
+            PeliculaSerieValidacion.validarId(id);
             
         } catch (PeliculaSerieExcepcion ex) {
             
@@ -283,54 +284,6 @@ public class PeliculaSerieControlador {
 
         }
 
-    }
-    
-    private void validarId(Integer id){
-        
-        if(id == null || id <= 0){
-            
-            throw new PeliculaSerieExcepcion("Id inválido o nulo");
-            
-        }
-        
-    }
-    
-    private void validarPeliculaSerieEntradaDto(PeliculaSerieEntradaDTO peliculaSerieEntrada){
-        
-        validarTitulo(peliculaSerieEntrada.getTitulo());
-        validarImagen(peliculaSerieEntrada.getImagen());
-        validarCalificacion(peliculaSerieEntrada.getCalificacion());
-        
-    }
-    
-        private void validarTitulo(String titulo){
-        
-        if(titulo == null || titulo.isEmpty() || titulo.length() > 30){
-            
-            throw new PeliculaSerieExcepcion("Título inválido, demasiado largo o vacío");
-            
-        }
-        
-    }
-    
-    private void validarImagen(String imagen){
-        
-        if(imagen == null || imagen.isEmpty() || imagen.length() > 30){
-            
-            throw new PeliculaSerieExcepcion("Imagen inválida, demasiada larga o vacía");
-            
-        }
-        
-    }
-    
-    private void validarCalificacion(byte calificacion){
-        
-        if(calificacion < 0 || calificacion > 5){
-            
-            throw new PeliculaSerieExcepcion("Calificación fuera de rango");
-            
-        }
-        
     }
     
     private void validarModoDeOrdenamiento(String modo){

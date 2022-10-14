@@ -6,6 +6,7 @@ import com.disney.alkemy.dto.PersonajeEntradaDTO;
 import com.disney.alkemy.dto.PersonajeSalidaDTO;
 import com.disney.alkemy.excepciones.PersonajeExcepcion;
 import com.disney.alkemy.servicios.PersonajeServicioImpl;
+import com.disney.alkemy.validaciones.PersonajeValidacion;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -69,7 +70,7 @@ public class PersonajeControlador {
 
         try {
             
-            validarNombre(name);
+            PersonajeValidacion.validarNombre(name);
             
         } catch (PersonajeExcepcion ex) {
             
@@ -102,7 +103,7 @@ public class PersonajeControlador {
 
         try {
             
-            validarEdad(age);
+            PersonajeValidacion.validarEdad(age);
             
         } catch (PersonajeExcepcion ex) {
             
@@ -135,7 +136,7 @@ public class PersonajeControlador {
 
         try {
             
-            validarId(idMovie);
+            PersonajeValidacion.validarId(idMovie);
             
         } catch (PersonajeExcepcion ex) {
             
@@ -168,7 +169,7 @@ public class PersonajeControlador {
 
         try {
             
-            validarId(id);
+            PersonajeValidacion.validarId(id);
             
         } catch (PersonajeExcepcion ex) {
             
@@ -193,7 +194,7 @@ public class PersonajeControlador {
 
         try {
             
-            validarPersonajeEntradaDTO(personajeEntradaDto);
+            PersonajeValidacion.validarPersonajeEntradaDTO(personajeEntradaDto);
             
         } catch (PersonajeExcepcion ex) {
             
@@ -224,8 +225,8 @@ public class PersonajeControlador {
 
         try {
             
-            validarId(id);
-            validarPersonajeEntradaDTO(personajeEntradaDto);
+            PersonajeValidacion.validarId(id);
+            PersonajeValidacion.validarPersonajeEntradaDTO(personajeEntradaDto);
             
         } catch (PersonajeExcepcion ex) {
             
@@ -256,7 +257,7 @@ public class PersonajeControlador {
 
         try {
             
-            validarId(id);
+            PersonajeValidacion.validarId(id);
             
         } catch (PersonajeExcepcion ex) {
             
@@ -274,76 +275,6 @@ public class PersonajeControlador {
 
         }
 
-    }
-
-    private void validarId(Integer id){
-        
-        if(id == null || id <= 0){
-            
-            throw new PersonajeExcepcion("Id inválido o nulo");
-            
-        }
-        
-    }
-    
-    private void validarPersonajeEntradaDTO(PersonajeEntradaDTO personajeEntradaDto) {
-
-        validarEdad(personajeEntradaDto.getEdad());
-        validarImagen(personajeEntradaDto.getImagen());
-        validarNombre(personajeEntradaDto.getNombre());
-        validarHistoria(personajeEntradaDto.getHistoria());
-        validarPeso(personajeEntradaDto.getPeso());
-        
-    }
-
-    private void validarEdad(byte edad) {
-
-        if(edad < 0 || edad > 150){
-            
-            throw new PersonajeExcepcion("Edad fuera de rango");
-            
-        }
-        
-    }
-
-    private void validarImagen(String imagen) {
-
-        if(imagen == null || imagen.isEmpty() || imagen.length() > 30){
-            
-            throw new PersonajeExcepcion("Imagen inválida, demasiada larga o vacía");
-            
-        }
-        
-    }
-
-    private void validarNombre(String nombre) {
-
-        if(nombre == null || nombre.isEmpty() || nombre.length() > 30){
-            
-            throw new PersonajeExcepcion("Nombre inválido, demasiado largo o vacío");
-            
-        }
-        
-    }
-
-    private void validarPeso(float peso) {
-
-        if(peso < 0 || peso > 600){
-            
-            throw new PersonajeExcepcion("Edad fuera de rango");
-            
-        }
-        
-    }
-
-    private void validarHistoria(String historia) {
-
-        if(historia == null || historia.isEmpty() || historia.length() > 255){
-            
-            throw new PersonajeExcepcion("Historia inválida, demasiado larga o vacía");
-            
-        }
-        
     }
     
 }

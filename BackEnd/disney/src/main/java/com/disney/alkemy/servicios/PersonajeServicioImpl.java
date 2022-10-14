@@ -19,6 +19,7 @@ import com.disney.alkemy.mapeadores.PeliculaSerieMapeador;
 import com.disney.alkemy.repositorios.PeliculaSerieRepositorio;
 import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
+import com.disney.alkemy.validaciones.PersonajeValidacion;
 
 /**
  *
@@ -70,7 +71,7 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public boolean crearPersonaje(PersonajeEntradaDTO personajeEntradaDto) {
 
-        validarPersonajeEntradaDTO(personajeEntradaDto);
+        PersonajeValidacion.validarPersonajeEntradaDTO(personajeEntradaDto);
         
         Personaje personaje = personajeMapeador.personajeEntradaDTOToPersonaje(personajeEntradaDto);
 
@@ -84,8 +85,8 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public boolean modificarPersonaje(PersonajeEntradaDTO personajeEntradaDto, Integer id) {
 
-        validarPersonajeEntradaDTO(personajeEntradaDto);
-        validarId(id);
+        PersonajeValidacion.validarPersonajeEntradaDTO(personajeEntradaDto);
+        PersonajeValidacion.validarId(id);
 
         Optional<Personaje> opcionalPersonaje = personajeRepositorio.findById(id);
 
@@ -115,7 +116,7 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public boolean eliminarPersonaje(Integer id) {
 
-        validarId(id);
+        PersonajeValidacion.validarId(id);
 
         Optional<Personaje> opcionalPersonaje = personajeRepositorio.findById(id);
 
@@ -136,7 +137,7 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public PersonajeDetalleDTO detallarPersonajeConSusPeliculasSeries(Integer id) {
 
-        validarId(id);
+        PersonajeValidacion.validarId(id);
 
         Optional<Personaje> opcionalPersonaje = personajeRepositorio.findById(id);
 
@@ -174,7 +175,7 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public List<PersonajeSalidaDTO> buscarPersonajesPorNombre(String nombre) {
 
-        validarNombre(nombre);
+        PersonajeValidacion.validarNombre(nombre);
         
         List<PersonajeSalidaDTO> personajesSalida = new ArrayList<>();
 
@@ -200,7 +201,7 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public List<PersonajeSalidaDTO> buscarPersonajesPorEdad(byte edad) {
 
-        validarEdad(edad);
+        PersonajeValidacion.validarEdad(edad);
         
         List<PersonajeSalidaDTO> personajesSalida = new ArrayList<>();
 
@@ -226,7 +227,7 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public List<PersonajeSalidaDTO> buscarPersonajesPorPeso(float peso) {
 
-        validarPeso(peso);
+        PersonajeValidacion.validarPeso(peso);
         
         List<PersonajeSalidaDTO> personajesSalida = new ArrayList<>();
 
@@ -252,7 +253,7 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
     @Override
     public List<PersonajeSalidaDTO> buscarPersonajesPorPeliculaSerie(Integer idPeliculaSerie) {
 
-        validarId(idPeliculaSerie);
+        PersonajeValidacion.validarId(idPeliculaSerie);
 
         Optional<PeliculaSerie> opcionalPeliculaSerie = peliculaSerieRepositorio.
                 findById(idPeliculaSerie);
@@ -285,76 +286,6 @@ public class PersonajeServicioImpl implements IPersonajeServicio {
 
         }
 
-    }
-
-    private void validarId(Integer id) {
-
-        if (id == null || id <= 0) {
-
-            throw new RuntimeException("Id inválido o incorrecto");
-
-        }
-
-    }
-
-    private void validarPersonajeEntradaDTO(PersonajeEntradaDTO personajeEntradaDto) {
-
-        validarEdad(personajeEntradaDto.getEdad());
-        validarImagen(personajeEntradaDto.getImagen());
-        validarNombre(personajeEntradaDto.getNombre());
-        validarHistoria(personajeEntradaDto.getHistoria());
-        validarPeso(personajeEntradaDto.getPeso());
-        
-    }
-
-    private void validarEdad(byte edad) {
-
-        if(edad < 0 || edad > 150){
-            
-            throw new PersonajeExcepcion("Edad fuera de rango");
-            
-        }
-        
-    }
-
-    private void validarImagen(String imagen) {
-
-        if(imagen == null || imagen.isEmpty() || imagen.length() > 30){
-            
-            throw new PersonajeExcepcion("Imagen inválida, demasiada larga o vacía");
-            
-        }
-        
-    }
-
-    private void validarNombre(String nombre) {
-
-        if(nombre == null || nombre.isEmpty() || nombre.length() > 30){
-            
-            throw new PersonajeExcepcion("Nombre inválido, demasiado largo o vacío");
-            
-        }
-        
-    }
-
-    private void validarPeso(float peso) {
-
-        if(peso < 0 || peso > 600){
-            
-            throw new PersonajeExcepcion("Edad fuera de rango");
-            
-        }
-        
-    }
-
-    private void validarHistoria(String historia) {
-
-        if(historia == null || historia.isEmpty() || historia.length() > 255){
-            
-            throw new PersonajeExcepcion("Historia inválida, demasiado larga o vacía");
-            
-        }
-        
     }
     
 }

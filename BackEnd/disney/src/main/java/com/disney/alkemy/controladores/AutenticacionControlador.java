@@ -6,6 +6,7 @@ import com.disney.alkemy.dto.UsuarioRegistroDTO;
 import com.disney.alkemy.excepciones.UsuarioExcepcion;
 import com.disney.alkemy.seguridad.JwtProveedor;
 import com.disney.alkemy.servicios.UsuarioServicioImpl;
+import com.disney.alkemy.validaciones.UsuarioValidacion;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -50,8 +51,7 @@ public class AutenticacionControlador {
 
         try {
             
-            validarEmail(usuarioIngresoDto.getEmail());
-            validarContrasenia(usuarioIngresoDto.getContrasenia());
+            UsuarioValidacion.validarUsuarioIngresoDTO(usuarioIngresoDto);
             
         } catch (UsuarioExcepcion ex) {
             
@@ -83,7 +83,7 @@ public class AutenticacionControlador {
 
         try {
             
-            validarUsuarioRegistroDTO(usuarioRegistrado);
+            UsuarioValidacion.validarUsuarioRegistroDTO(usuarioRegistrado);
             
         } catch (UsuarioExcepcion ex) {
             
@@ -95,55 +95,6 @@ public class AutenticacionControlador {
 
         return new ResponseEntity<>("Usuario registrado", HttpStatus.CREATED);
 
-    }
-
-    private void validarUsuarioRegistroDTO(UsuarioRegistroDTO usuarioRegistroDto){
-        
-        validarNombre(usuarioRegistroDto.getNombre());
-        validarEmail(usuarioRegistroDto.getEmail());
-        validarContrasenia(usuarioRegistroDto.getContrasenia());
-        validarRol(usuarioRegistroDto.getRol());
-        
-    }
-    
-    private void validarNombre(String nombre){
-        
-        if(nombre == null || nombre.isEmpty() || nombre.length() > 30){
-            
-            throw new UsuarioExcepcion("Nombre inválido, demasiado largo o vacío");
-            
-        }
-        
-    }
-    
-    private void validarEmail(String email){
-        
-        if(email == null || email.isEmpty() || email.length() > 50){
-            
-            throw new UsuarioExcepcion("Email inválido, demasiado largo o vacío");
-            
-        }
-        
-    }
-    
-    private void validarContrasenia(String contrasenia){
-        
-        if(contrasenia == null || contrasenia.isEmpty() || contrasenia.length() > 255){
-            
-            throw new UsuarioExcepcion("Contraseña inválida, demasiada larga o vacía");
-            
-        }
-        
-    }
-    
-    private void validarRol(String rol){
-        
-        if(rol == null || rol.isEmpty() || rol.length() > 20){
-            
-            throw new UsuarioExcepcion("Rol inválido, demasiado largo o vacío");
-            
-        }
-        
     }
     
 }
