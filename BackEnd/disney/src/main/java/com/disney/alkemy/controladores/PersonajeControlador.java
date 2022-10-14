@@ -4,6 +4,7 @@ import com.disney.alkemy.dto.PersonajeDTO;
 import com.disney.alkemy.dto.PersonajeDetalleDTO;
 import com.disney.alkemy.dto.PersonajeEntradaDTO;
 import com.disney.alkemy.dto.PersonajeSalidaDTO;
+import com.disney.alkemy.excepciones.PersonajeExcepcion;
 import com.disney.alkemy.servicios.PersonajeServicioImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -51,7 +52,7 @@ public class PersonajeControlador {
 
         } else {
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
@@ -66,6 +67,16 @@ public class PersonajeControlador {
     @GetMapping("/search")
     public ResponseEntity<List<PersonajeSalidaDTO>> buscarPorNombre(@RequestParam("name") String name) {
 
+        try {
+            
+            validarNombre(name);
+            
+        } catch (PersonajeExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         List<PersonajeSalidaDTO> personajes = personajeServicio.buscarPersonajesPorNombre(name);
 
         if (personajes != null) {
@@ -74,7 +85,7 @@ public class PersonajeControlador {
 
         } else {
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
@@ -89,6 +100,16 @@ public class PersonajeControlador {
     @GetMapping("/filter-age")
     public ResponseEntity<List<PersonajeSalidaDTO>> filtrarPorEdad(@RequestParam("age") byte age) {
 
+        try {
+            
+            validarEdad(age);
+            
+        } catch (PersonajeExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         List<PersonajeSalidaDTO> personajes = personajeServicio.buscarPersonajesPorEdad(age);
 
         if (personajes != null) {
@@ -97,7 +118,7 @@ public class PersonajeControlador {
 
         } else {
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
@@ -112,6 +133,16 @@ public class PersonajeControlador {
     @GetMapping("/filter-movie")
     public ResponseEntity<List<PersonajeSalidaDTO>> filtrarPorPeliculaSerie(@RequestParam("idMovie") Integer idMovie) {
 
+        try {
+            
+            validarId(idMovie);
+            
+        } catch (PersonajeExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         List<PersonajeSalidaDTO> personajes = personajeServicio.buscarPersonajesPorPeliculaSerie(idMovie);
 
         if (personajes != null) {
@@ -120,7 +151,7 @@ public class PersonajeControlador {
 
         } else {
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
@@ -135,6 +166,16 @@ public class PersonajeControlador {
     @GetMapping("/detail/{id}")
     public ResponseEntity<PersonajeDetalleDTO> detallarPersonaje(@PathVariable("id") Integer id) {
 
+        try {
+            
+            validarId(id);
+            
+        } catch (PersonajeExcepcion ex) {
+            
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         PersonajeDetalleDTO personaje = personajeServicio.detallarPersonajeConSusPeliculasSeries(id);
 
         return new ResponseEntity<>(personaje, HttpStatus.OK);
@@ -150,6 +191,16 @@ public class PersonajeControlador {
     @PostMapping("/create-character")
     public ResponseEntity<PersonajeEntradaDTO> crearPersonaje(@RequestBody PersonajeEntradaDTO personajeEntradaDto) {
 
+        try {
+            
+            validarPersonajeEntradaDTO(personajeEntradaDto);
+            
+        } catch (PersonajeExcepcion ex) {
+            
+            return new ResponseEntity<>(personajeEntradaDto, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         if (personajeServicio.crearPersonaje(personajeEntradaDto)) {
 
             return new ResponseEntity<>(personajeEntradaDto, HttpStatus.CREATED);
@@ -162,7 +213,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Edición de personajes", notes = "Pasar ID por el path y los atributos que se necesitan para la edición, son: Edad, Peso, Imagen, Nombre e Historia")
+    @ApiOperation(value = "Edición de personaje", notes = "Pasar ID por el path y los atributos que se necesitan para la edición, son: Edad, Peso, Imagen, Nombre e Historia")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se editó correctamente", response = PersonajeEntradaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo editar el recurso, debido a una falla en el cliente", response = String.class),
@@ -171,13 +222,24 @@ public class PersonajeControlador {
     @PutMapping("/{id}")
     public ResponseEntity<PersonajeEntradaDTO> editarPersonaje(@PathVariable("id") Integer id, @RequestBody PersonajeEntradaDTO personajeEntradaDto) {
 
+        try {
+            
+            validarId(id);
+            validarPersonajeEntradaDTO(personajeEntradaDto);
+            
+        } catch (PersonajeExcepcion ex) {
+            
+            return new ResponseEntity<>(personajeEntradaDto, HttpStatus.BAD_REQUEST);
+            
+        }
+        
         if (personajeServicio.modificarPersonaje(personajeEntradaDto, id)) {
 
             return new ResponseEntity<>(personajeEntradaDto, HttpStatus.CREATED);
 
         } else {
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
@@ -190,18 +252,98 @@ public class PersonajeControlador {
         @ApiResponse(code = 500, message = "INTERNAL SERVER ERROR. Error inesperado del sistema")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarPersonaje(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> eliminarPersonaje(@PathVariable("id") Integer id) {
 
+        try {
+            
+            validarId(id);
+            
+        } catch (PersonajeExcepcion ex) {
+            
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            
+        }
+        
         if (personajeServicio.eliminarPersonaje(id)) {
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         } else {
 
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
     }
 
+    private void validarId(Integer id){
+        
+        if(id == null || id < 0){
+            
+            throw new PersonajeExcepcion("Id inválido o nulo");
+            
+        }
+        
+    }
+    
+    private void validarPersonajeEntradaDTO(PersonajeEntradaDTO personajeEntradaDto) {
+
+        validarEdad(personajeEntradaDto.getEdad());
+        validarImagen(personajeEntradaDto.getImagen());
+        validarNombre(personajeEntradaDto.getNombre());
+        validarHistoria(personajeEntradaDto.getHistoria());
+        validarPeso(personajeEntradaDto.getPeso());
+        
+    }
+
+    private void validarEdad(byte edad) {
+
+        if(edad < 0 || edad > 150){
+            
+            throw new PersonajeExcepcion("Edad fuera de rango");
+            
+        }
+        
+    }
+
+    private void validarImagen(String imagen) {
+
+        if(imagen == null || imagen.isEmpty() || imagen.length() > 30){
+            
+            throw new PersonajeExcepcion("Imagen inválida, demasiada larga o vacía");
+            
+        }
+        
+    }
+
+    private void validarNombre(String nombre) {
+
+        if(nombre == null || nombre.isEmpty() || nombre.length() > 30){
+            
+            throw new PersonajeExcepcion("Nombre inválido, demasiado largo o vacío");
+            
+        }
+        
+    }
+
+    private void validarPeso(float peso) {
+
+        if(peso < 0 || peso > 600){
+            
+            throw new PersonajeExcepcion("Edad fuera de rango");
+            
+        }
+        
+    }
+
+    private void validarHistoria(String historia) {
+
+        if(historia == null || historia.isEmpty() || historia.length() > 255){
+            
+            throw new PersonajeExcepcion("Historia inválida, demasiado larga o vacía");
+            
+        }
+        
+    }
+    
 }
