@@ -361,9 +361,9 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
 
     private void validarTitulo(String titulo){
         
-        if(titulo == null || titulo.isEmpty()){
+        if(titulo == null || titulo.isEmpty() || titulo.length() > 30){
             
-            throw new PeliculaSerieExcepcion("Título inválido o vacío");
+            throw new PeliculaSerieExcepcion("Título inválido, demasiado largo o vacío");
             
         }
         
@@ -379,9 +379,9 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     
     private void validarImagen(String imagen){
         
-        if(imagen == null || imagen.isEmpty()){
+        if(imagen == null || imagen.isEmpty() || imagen.length() > 30){
             
-            throw new PeliculaSerieExcepcion("Imagen inválida o vacía");
+            throw new PeliculaSerieExcepcion("Imagen inválida, demasiada larga o vacía");
             
         }
         
@@ -389,7 +389,7 @@ public class PeliculaSerieServicioImpl implements IPeliculaSerieServicio {
     
     private void validarCalificacion(byte calificacion){
         
-        if(calificacion < 0 && calificacion > 5){
+        if(calificacion < 0 || calificacion > 5){
             
             throw new PeliculaSerieExcepcion("Calificación fuera de rango");
             
