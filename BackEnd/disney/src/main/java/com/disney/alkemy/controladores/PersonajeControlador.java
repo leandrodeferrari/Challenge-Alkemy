@@ -36,7 +36,7 @@ public class PersonajeControlador {
     @Autowired
     private PersonajeServicioImpl personajeServicio;
 
-    @ApiOperation(value = "Listado de personajes", notes = "Atributos de los personajes a mostrar: Nombre e Imagen")
+    @ApiOperation(value = "Listado de Personajes", notes = "Atributos de los personajes a mostrar: Nombre e Imagen")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -59,7 +59,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Listado de personajes, filtrados por nombre", notes = "Recibe, como parámetro, un nombre (String, longitud máx: 30)")
+    @ApiOperation(value = "Listado de Personajes, filtrados por Nombre", notes = "Recibe, como parámetro, un Nombre (String, longitud máx: 30)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -92,7 +92,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Listado de personajes, filtrados por edad", notes = "Recibe, como parámetro, una edad (byte)")
+    @ApiOperation(value = "Listado de Personajes, filtrados por Edad", notes = "Recibe, como parámetro, una Edad (byte)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -125,7 +125,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Listado de personajes, filtrados por Pelicula/Serie", notes = "Recibe, como parámetro, un ID de Pelicula/Serie (Integer)")
+    @ApiOperation(value = "Listado de Personajes, filtrados por Pelicula/Serie", notes = "Recibe, como parámetro, un ID de Pelicula/Serie (Integer)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -158,7 +158,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Detalle del personaje, con sus Peliculas/Series", notes = "Recibe por path, el ID del personaje")
+    @ApiOperation(value = "Detalle del Personaje, con sus Peliculas/Series", notes = "Recibe por path, el ID del Personaje")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PersonajeDetalleDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -183,7 +183,7 @@ public class PersonajeControlador {
 
     }
     
-    @ApiOperation(value = "Creación de personaje", notes = "Atributos que se necesita para la creación: Edad, Peso, Imagen, Nombre e Historia")
+    @ApiOperation(value = "Creación del Personaje", notes = "Atributos que se necesita para su creación: Edad, Peso, Imagen, Nombre e Historia")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se creó correctamente", response = PersonajeEntradaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo crear el recurso, debido a una falla en el cliente", response = String.class),
@@ -214,7 +214,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Edición de personaje", notes = "Pasar ID por el path y los atributos que se necesitan para la edición, son: Edad, Peso, Imagen, Nombre e Historia")
+    @ApiOperation(value = "Edición de Personaje", notes = "Pasar ID por el path y los atributos que se necesitan para su edición, que son: Edad, Peso, Imagen, Nombre e Historia")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se editó correctamente", response = PersonajeEntradaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo editar el recurso, debido a una falla en el cliente", response = String.class),
@@ -246,7 +246,7 @@ public class PersonajeControlador {
 
     }
 
-    @ApiOperation(value = "Eliminación de personajes", notes = "Pasar ID por el path")
+    @ApiOperation(value = "Eliminación de Personajes", notes = "Pasar ID por el path")
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "NO CONTENT. El recurso se borró correctamente", response = String.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo eliminar el recurso, debido a una falla en el cliente", response = String.class),

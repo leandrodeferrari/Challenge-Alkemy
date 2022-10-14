@@ -36,7 +36,7 @@ public class PeliculaSerieControlador {
     @Autowired
     private PeliculaSerieServicioImpl peliculaSerieServicio;
     
-    @ApiOperation(value = "Listado de peliculas/series", notes = "Atributos de las peliculas/series a mostrar: Título, Imagen y Fecha de creación")
+    @ApiOperation(value = "Listado de Peliculas/Series", notes = "Atributos de las Peliculas/Series a mostrar: Título, Imagen y Fecha de creación")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -60,7 +60,7 @@ public class PeliculaSerieControlador {
         
     }
     
-    @ApiOperation(value = "Listado de peliculas/series, buscados por título", notes = "Recibe, como parámetro, un título (String, longitud máx: 30)")
+    @ApiOperation(value = "Listado de Peliculas/Series, buscados por título", notes = "Recibe, como parámetro, un Título (String, longitud máx: 30)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -94,7 +94,7 @@ public class PeliculaSerieControlador {
         
     }
     
-    @ApiOperation(value = "Listado de peliculas/series, filtrados por género", notes = "Recibe, como parámetro, el ID de un género (Integer)")
+    @ApiOperation(value = "Listado de Peliculas/Series, filtrados por género", notes = "Recibe, como parámetro, el ID de un Género (Integer)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -127,7 +127,7 @@ public class PeliculaSerieControlador {
         
     }
     
-    @ApiOperation(value = "Listado de peliculas/series, ordenadas de forma ascendente o descendente", notes = "Recibe, como parámetro, el modo de ordenamiento (String de longitud máx 4, ASC O DESC, sin disntición de mayúsculas o minúsculas)")
+    @ApiOperation(value = "Listado de Peliculas/Series, ordenadas de forma ascendente o descendente", notes = "Recibe, como parámetro, el Modo de ordenamiento (String de longitud máx 4, ASC O DESC, sin disntición de mayúsculas o minúsculas)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieSalidaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -166,7 +166,7 @@ public class PeliculaSerieControlador {
         
     }
     
-    @ApiOperation(value = "Detalle de la Pelicula/serie, con sus Personajes", notes = "Recibe por path, el ID de la Pelicula/serie")
+    @ApiOperation(value = "Detalle de la Pelicula/Serie, con sus Personajes", notes = "Recibe por path, el ID de la Pelicula/Serie")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK. El recurso se obtiene correctamente", response = PeliculaSerieDetalleDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -192,7 +192,7 @@ public class PeliculaSerieControlador {
 
     }
     
-    @ApiOperation(value = "Creación de pelicula/serie", notes = "Atributos que se necesita para la creación: Título, Imagen, Calificación y Nombre del Género, este último sin disntición de mayúsculas o minúsculas")
+    @ApiOperation(value = "Creación de Pelicula/Serie", notes = "Atributos que se necesita para su creación: Título, Imagen, Calificación y Nombre del Género, este último sin disntición de mayúsculas o minúsculas")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se creó correctamente", response = PeliculaSerieEntradaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo crear el recurso, debido a una falla en el cliente", response = String.class),
@@ -223,7 +223,7 @@ public class PeliculaSerieControlador {
         
     }
     
-    @ApiOperation(value = "Edición de pelicula/serie", notes = "Pasar ID por el path y los atributos que se necesitan para la edición, son: Título, Imagen, Calificación y Nombre del Género, este último sin disntición de mayúsculas o minúsculas")
+    @ApiOperation(value = "Edición de Pelicula/Serie", notes = "Pasar ID por el path y los atributos que se necesitan para su edición, que son: Título, Imagen, Calificación y Nombre del Género, este último sin disntición de mayúsculas o minúsculas")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se editó correctamente", response = PeliculaSerieEntradaDTO.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo editar el recurso, debido a una falla en el cliente", response = String.class),
@@ -255,7 +255,7 @@ public class PeliculaSerieControlador {
 
     }
     
-    @ApiOperation(value = "Eliminación de pelicula/serie", notes = "Pasar ID por el path")
+    @ApiOperation(value = "Eliminación de Pelicula/Serie", notes = "Pasar ID por el path")
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "NO CONTENT. El recurso se borró correctamente", response = String.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. No se pudo eliminar el recurso, debido a una falla en el cliente", response = String.class),

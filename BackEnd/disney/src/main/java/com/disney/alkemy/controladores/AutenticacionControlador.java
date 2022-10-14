@@ -40,7 +40,7 @@ public class AutenticacionControlador {
     @Autowired
     private JwtProveedor jwtProveedor;
 
-    @ApiOperation(value = "Ingreso de Usuario", notes = "Atributos del usuario, para su autenticación: Email y Contraseña")
+    @ApiOperation(value = "Ingreso de Usuario", notes = "Atributos del Usuario, para su autenticación: Email y Contraseña")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "OK. El recurso se creó correctamente", response = String.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
@@ -72,7 +72,7 @@ public class AutenticacionControlador {
         
     }
 
-    @ApiOperation(value = "Registro de Usuario", notes = "Atributos del usuario, para su creación: Nombre, Email, Contraseña y Rol")
+    @ApiOperation(value = "Registro de Usuario", notes = "Atributos del Usuario, para su creación: Nombre, Email, Contraseña y Rol")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "CREATED. El recurso se creó correctamente", response = String.class),
         @ApiResponse(code = 400, message = "BAD REQUEST. Algo falló en el cliente", response = String.class),
