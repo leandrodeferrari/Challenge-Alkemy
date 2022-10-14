@@ -13,7 +13,10 @@ CREATE TABLE IF NOT EXISTS personajes(
 );
 
 ALTER TABLE personajes
-ADD CONSTRAINT CK_personajes_edad CHECK (edad < 150);
+ADD CONSTRAINT CK_personajes_edad CHECK (edad <= 150);
+
+ALTER TABLE personajes
+ADD CONSTRAINT CK_personajes_peso CHECK (peso <= 600);
 
 CREATE TABLE IF NOT EXISTS generos(
 	id INT UNSIGNED AUTO_INCREMENT NOT NULL,
