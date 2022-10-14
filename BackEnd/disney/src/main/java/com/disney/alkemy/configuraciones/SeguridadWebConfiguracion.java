@@ -2,13 +2,11 @@ package com.disney.alkemy.configuraciones;
 
 import com.disney.alkemy.seguridad.JwtAutenticacionDeEntrada;
 import com.disney.alkemy.seguridad.JwtFiltroDeToken;
-//import com.disney.alkemy.servicios.UsuarioServicioImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.http.HttpMethod;
-//import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,13 +20,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  *
  * @author Leandro Deferrari
  */
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SeguridadWebConfiguracion extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private UsuarioServicioImpl usuarioServicio;
     @Autowired
     private JwtAutenticacionDeEntrada jwtEntrada;
 
@@ -57,7 +54,9 @@ public class SeguridadWebConfiguracion extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
+        
         return super.authenticationManagerBean();
+        
     }
 
 }
