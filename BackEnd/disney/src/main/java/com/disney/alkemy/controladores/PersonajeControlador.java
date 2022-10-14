@@ -278,7 +278,7 @@ public class PersonajeControlador {
 
     private void validarId(Integer id){
         
-        if(id == null || id < 0){
+        if(id == null || id <= 0){
             
             throw new PersonajeExcepcion("Id inválido o nulo");
             
