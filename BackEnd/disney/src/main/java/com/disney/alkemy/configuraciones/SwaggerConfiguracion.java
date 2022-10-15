@@ -66,7 +66,7 @@ public class SwaggerConfiguracion {
         return new ApiInfo(
                 "Challenge Alkemy",
                 "Api Rest de Disney",
-                "0.0.1",
+                "1.0.0",
                 "Terminos del servicio",
                 new Contact("Leandro Deferrari",
                             "https://www.linkedin.com/in/javadeveloper-leandrodeferrariarevalo/",
