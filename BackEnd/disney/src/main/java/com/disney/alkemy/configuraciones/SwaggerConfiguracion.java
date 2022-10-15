@@ -67,12 +67,12 @@ public class SwaggerConfiguracion {
                 "Challenge Alkemy",
                 "Api Rest de Disney",
                 "1.0.0",
-                "Terminos del servicio",
+                "Términos del servicio",
                 new Contact("Leandro Deferrari",
                             "https://www.linkedin.com/in/javadeveloper-leandrodeferrariarevalo/",
                             "leandro_deferrari@hotmail.com"),
                 "Lincencia de la API",
-                "Licencia de la API URL",
+                "Licencia de la API (URL)",
                 Collections.emptyList());
 
     }
