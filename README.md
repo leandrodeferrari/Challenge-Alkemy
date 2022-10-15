@@ -11,35 +11,35 @@ ___
 
 ## **Token**
 
-![Vista Swagger Token](./imagenes/swagger-token.png)
+![Vista Swagger Token](./Imagenes-Documentacion/swagger-token.png)
 
 Para autenticarse, se debe escribir Bearer + espacio + pegar el Token (que se genera, al logearse).
 
-![Vista Swagger Autenticado](./imagenes/swagger-token-aceptado.png)
+![Vista Swagger Autenticado](./Imagenes-Documentacion/swagger-token-aceptado.png)
 ___
 
 ## **Capturas de pantalla**
 
 Vista Swagger
 
-![Vista Swagger-1](./imagenes/swagger-vista-1.png)
+![Vista Swagger-1](./Imagenes-Documentacion/swagger-vista-1.png)
 
-![Vista Swagger-2](./imagenes/swagger-vista-2.png)
+![Vista Swagger-2](./Imagenes-Documentacion/swagger-vista-2.png)
 
 Vista Models
 
-![Vista Swagger Models](./imagenes/swagger-models.png)
+![Vista Swagger Models](./Imagenes-Documentacion/swagger-models.png)
 
 Endpoints de Autenticación
 
-![Vista Swagger Autenticación](./imagenes/swagger-autenticacion.png)
+![Vista Swagger Autenticación](./Imagenes-Documentacion/swagger-autenticacion.png)
 
 Endpoints de PeliculaSerie
 
-![Vista Swagger PeliculaSerie](./imagenes/swagger-peliculaserie.png)
+![Vista Swagger PeliculaSerie](./Imagenes-Documentacion/swagger-peliculaserie.png)
 
 Endpoints de Personaje
 
-![Vista Swagger Personaje](./imagenes/swagger-personaje.png)
+![Vista Swagger Personaje](./Imagenes-Documentacion/swagger-personaje.png)
 
 ___
